@@ -1,0 +1,7 @@
+[gd_scene load_steps=2 format=3 uid="uid://c35ot4uijjj3n"]
+
+[ext_resource type="PackedScene" uid="uid://ibp5swfilbpv" path="res://scenes/interactables/InteractableObject.tscn" id="1_f6b0t"]
+
+[node name="Test" instance=ExtResource("1_f6b0t")]
+objectName = "The Cherry"
+objectType = 3

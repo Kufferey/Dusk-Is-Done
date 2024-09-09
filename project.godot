@@ -14,6 +14,10 @@ config/name="Dusk Is Done"
 config/features=PackedStringArray("4.3", "C#", "Forward Plus")
 config/icon="res://icon.svg"
 
+[autoload]
+
+InteractableObjectManager="*res://scripts/interactables/InteractableObjectManager.cs"
+
 [dotnet]
 
 project/assembly_name="Dusk Is Done"

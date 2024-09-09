@@ -1,13 +1,12 @@
 using Godot;
 using System;
-using System.Numerics;
 
 [Tool]
 [GlobalClass]
 public partial class InteractableObject : Node3D
 {
 	[Signal]
-	public delegate void ItemHoveredEventHandler(InteractableObjectType item);
+	public delegate void ItemHoveredEventHandler(InteractableObjectType type);
 	[Signal]
 	public delegate void ItemInteractedEventHandler(InteractableObjectType type);
 
@@ -17,10 +16,6 @@ public partial class InteractableObject : Node3D
 	public String objectDesc;
 	[Export(PropertyHint.Enum)]
 	public InteractableObjectType objectType;
-
-	[ExportGroup("Item Setup")]
-	[Export]
-	private CollisionShape3D interactionBox;
 
 	[ExportGroup("Item Settings")]
 	[Export]
@@ -39,11 +34,18 @@ public partial class InteractableObject : Node3D
 		MedicalPills,
 	}
 
-    // Called every frame. 'delta' is the elapsed time since the previous frame.
+	private CollisionShape3D interactionBox;
+
+    public override void _Ready()
+    {
+		if (interactionBox == null) interactionBox = GetNode<CollisionShape3D>("Area3D/CollisionShape3D");
+    }
+
     public override void _Process(double delta)
 	{
 		if (Engine.IsEditorHint())
 		{
+			if (interactionBox == null) interactionBox = GetNode<CollisionShape3D>("Area3D/CollisionShape3D");
 			interactionBox.Scale = interactionBoxScale;
 		}
 	}

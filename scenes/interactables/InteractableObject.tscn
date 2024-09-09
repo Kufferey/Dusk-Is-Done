@@ -4,9 +4,8 @@
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_v22tb"]
 
-[node name="InteractableObject" type="Node3D" node_paths=PackedStringArray("interactionBox")]
+[node name="InteractableObject" type="Node3D"]
 script = ExtResource("1_2xj0k")
-interactionBox = NodePath("Area3D/CollisionShape3D")
 
 [node name="Model" type="Node3D" parent="."]
 
