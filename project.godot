@@ -16,7 +16,7 @@ config/icon="res://icon.svg"
 
 [autoload]
 
-InteractableObjectManager="*res://scripts/interactables/InteractableObjectManager.cs"
+InteractableObjectManager="res://scripts/interactables/InteractableObjectManager.cs"
 
 [dotnet]
 
