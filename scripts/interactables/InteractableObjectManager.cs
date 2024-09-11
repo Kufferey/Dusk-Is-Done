@@ -1,7 +1,6 @@
 using Godot;
 using System;
 
-[GlobalClass]
 public partial class InteractableObjectManager : Node
 {
 	// List of all items in the game.

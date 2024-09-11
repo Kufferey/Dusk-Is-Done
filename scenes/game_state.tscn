@@ -1,10 +1,47 @@
-[gd_scene load_steps=2 format=3 uid="uid://dn44rusqd22fj"]
+[gd_scene load_steps=6 format=3 uid="uid://dn44rusqd22fj"]
 
 [ext_resource type="Script" path="res://scripts/GameState.cs" id="1_17okt"]
+[ext_resource type="Script" path="res://scripts/Player.cs" id="2_jxq7i"]
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_88tpi"]
+sky_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
+ground_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
+
+[sub_resource type="Sky" id="Sky_u554q"]
+sky_material = SubResource("ProceduralSkyMaterial_88tpi")
+
+[sub_resource type="Environment" id="Environment_88ols"]
+background_mode = 2
+sky = SubResource("Sky_u554q")
+tonemap_mode = 2
+glow_enabled = true
 
 [node name="GameState" type="Node3D"]
 script = ExtResource("1_17okt")
 
 [node name="Interactables" type="Node" parent="."]
 
+[node name="Environment" type="Node" parent="."]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="Environment"]
+environment = SubResource("Environment_88ols")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="Environment"]
+transform = Transform3D(-0.866023, -0.433016, 0.250001, 0, 0.499998, 0.866027, -0.500003, 0.749999, -0.43301, 0, 0, 0)
+shadow_enabled = true
+
 [node name="Props" type="Node" parent="."]
+
+[node name="CSGBox3D" type="CSGBox3D" parent="Props"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -8.82389)
+
+[node name="Player" type="Node" parent="."]
+
+[node name="Player" type="Node3D" parent="Player" node_paths=PackedStringArray("playerCameraNode", "playerCamera")]
+script = ExtResource("2_jxq7i")
+playerCameraNode = NodePath("CameraNeck")
+playerCamera = NodePath("CameraNeck/Camera3D")
+
+[node name="CameraNeck" type="Node3D" parent="Player/Player"]
+
+[node name="Camera3D" type="Camera3D" parent="Player/Player/CameraNeck"]
