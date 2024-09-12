@@ -3,16 +3,14 @@ using System;
 
 public partial class Player : Node3D
 {
-	//TODO : Make the "ZoomCamera" a signal.
-
-	public static float playerCameraTurnSpeed = 2F;
+	public static float playerCameraTurnSpeed = 0.8F;
+	public static float playerCameraTurnSpeedStart = playerCameraTurnSpeed;
 
 	[Export]
 	public Node3D playerCameraNode {get; set;}
 	[Export]
 	public Camera3D playerCamera {get; set;}
 
-	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
 		if (Globals.canMoveCamera)
@@ -21,7 +19,6 @@ public partial class Player : Node3D
 		}
 	}
 
-	// Called every frame. 'delta' is the elapsed time since the previous frame.
 	public override void _Process(double delta)
 	{
 		
@@ -51,8 +48,10 @@ public partial class Player : Node3D
 	public void ZoomCameraWithSens(float from, float to, Tween.EaseType easeType, float duration = 0.3F)
 	{
 		ZoomCamera(from, to, easeType, duration);
-		playerCameraTurnSpeed = Mathf.Lerp(playerCameraTurnSpeed, Mathf.Abs(
-			(playerCameraTurnSpeed - to / 25)), 1.0F + duration);
+		playerCameraTurnSpeed = Mathf.Abs(Mathf.Lerp(playerCameraTurnSpeed, Mathf.Abs(
+			playerCameraTurnSpeed - to / -25F), 1.0F + duration));
+		
+		if (playerCameraTurnSpeed > playerCameraTurnSpeedStart) playerCameraTurnSpeed = playerCameraTurnSpeed / to;
 	}
 
 	public float GetCameraZoom()
