@@ -6,26 +6,39 @@ public partial class GameState : Node3D
 	[Signal]
 	public delegate void NewDayEventHandler();
 
-	[Export]
-	public int playerScore = 0;
+	public static int currentDay;
+
+	public static int playerScore = 0;
+
 	[Export]
 	public InteractableObject playerCurrentHoveredObject;
 	[Export]
 	public InteractableObject playerCurrentHeldItem;
-	
-	[Export]
-	public int currentDay;
 
-	private InteractableObjectManager interactableObjectManager;
-
-	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
-		interactableObjectManager = GetNode<InteractableObjectManager>("/root/InteractableObjectManager");
-		GD.Print(interactableObjectManager.interactableObjectPrefabs);
+		ZoomCamera(GetNode<Camera3D>("Player/Player/CameraNeck/Camera3D").Fov, GetNode<Camera3D>("Player/Player/CameraNeck/Camera3D").Fov / 8F, Tween.EaseType.InOut, true, 6.5F);
 	}
 
-	// Called every frame. 'delta' is the elapsed time since the previous frame.
+	public void ZoomCamera(float from, float to, Tween.EaseType easeType, bool useCameraSens, float duration = 0.3F)
+	{
+		if (GetNode<Node3D>("Player/Player").HasMethod("ZoomCameraWithSens") && GetNode<Node3D>("Player/Player").HasMethod("ZoomCamera"))
+		{
+			if (useCameraSens)
+			{
+				GetNode<Node3D>("Player/Player").Callv(Player.MethodName.ZoomCameraWithSens, new Godot.Collections.Array{
+					from, to, (int)easeType, duration
+				});	
+			}
+			else
+			{
+				GetNode<Node3D>("Player/Player").Callv(Player.MethodName.ZoomCamera, new Godot.Collections.Array{
+					from, to, (int)easeType, duration
+				});	
+			}
+		}
+	}
+
 	public override void _Process(double delta)
 	{
 		
@@ -33,7 +46,7 @@ public partial class GameState : Node3D
 
 	public void AddTableItem(InteractableObject.InteractableObjectType type)
 	{
-		Node tableItem = interactableObjectManager.interactableObjectPrefabs[type].Instantiate();
+		Node tableItem = InteractableObjectManager.interactableObjectPrefabs[type].Instantiate();
 		GetNode<Node>("Interactables").AddChild(tableItem);
 	}
 }

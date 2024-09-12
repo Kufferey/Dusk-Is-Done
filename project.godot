@@ -11,12 +11,9 @@ config_version=5
 [application]
 
 config/name="Dusk Is Done"
+config/tags=PackedStringArray("3d", "horror")
 config/features=PackedStringArray("4.3", "C#", "Forward Plus")
 config/icon="res://icon.svg"
-
-[autoload]
-
-InteractableObjectManager="*res://scripts/interactables/InteractableObjectManager.cs"
 
 [dotnet]
 
