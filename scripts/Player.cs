@@ -3,7 +3,7 @@ using System;
 
 public partial class Player : Node3D
 {
-	public static float playerCameraTurnSpeed = 0.8F;
+	public static float playerCameraTurnSpeed = ((Godot.Collections.Dictionary<string, float>)Globals.settings["sens"])["value"];
 	public static float playerCameraTurnSpeedStart = playerCameraTurnSpeed;
 
 	[Export]
@@ -13,7 +13,7 @@ public partial class Player : Node3D
 
 	public override void _Ready()
 	{
-		if (Globals.canMoveCamera)
+		if (Globals.playerCanMoveCamera)
 		{
 			Input.SetMouseMode(Input.MouseModeEnum.Captured);
 		}
@@ -26,7 +26,7 @@ public partial class Player : Node3D
 
     public override void _Input(InputEvent @event)
     {
-		if (@event is InputEventMouseMotion mouseMovement && Globals.canMoveCamera)
+		if (@event is InputEventMouseMotion mouseMovement && Globals.playerCanMoveCamera)
 		{
 			RotateY(-Mathf.DegToRad(mouseMovement.Relative.X * playerCameraTurnSpeed));
 			playerCameraNode.RotateX(-Mathf.DegToRad(mouseMovement.Relative.Y * playerCameraTurnSpeed));
@@ -38,20 +38,30 @@ public partial class Player : Node3D
 		}
     }
 
-	public void ZoomCamera(float from, float to, Tween.EaseType easeType, float duration = 0.3F)
+	public void ZoomCamera(float from, float to, Tween.EaseType easeType, bool useSens, float duration = 0.3F)
 	{
 		Tween tween = GetTree().CreateTween();
 		tween.SetEase(easeType);
 		tween.TweenProperty(playerCamera, "fov", to, duration);
+
+		if (useSens)
+		{
+			playerCameraTurnSpeed = Mathf.Abs(Mathf.Lerp(playerCameraTurnSpeed, Mathf.Abs(
+				playerCameraTurnSpeed - to / -25F), 1.0F + duration));
+
+			if (playerCameraTurnSpeed > playerCameraTurnSpeedStart) playerCameraTurnSpeed = playerCameraTurnSpeed / to;
+		}
 	}
 
-	public void ZoomCameraWithSens(float from, float to, Tween.EaseType easeType, float duration = 0.3F)
+	public void ZoomAndLockCamera(float from, float to, Vector3 position, Tween.EaseType easeType, bool useSens, bool lockCam, float duration = 0.3F)
 	{
-		ZoomCamera(from, to, easeType, duration);
-		playerCameraTurnSpeed = Mathf.Abs(Mathf.Lerp(playerCameraTurnSpeed, Mathf.Abs(
-			playerCameraTurnSpeed - to / -25F), 1.0F + duration));
-		
-		if (playerCameraTurnSpeed > playerCameraTurnSpeedStart) playerCameraTurnSpeed = playerCameraTurnSpeed / to;
+		ZoomCamera(from, to, easeType, useSens, duration);
+		if (lockCam)
+		{
+			Globals.playerCanMoveCamera = false;
+			
+			playerCameraNode.LookAt(position);
+		}
 	}
 
 	public float GetCameraZoom()
