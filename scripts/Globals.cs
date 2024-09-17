@@ -16,29 +16,20 @@ public partial class Globals : Node
                 {0.1F}, // Min value
                 {2F}    // Max value
             }},
-            {"value", 0.8F}
+            {"value", 5.8F} // Default 0.8
         }},
     };
 
-    public override void _Ready()
-    {
-        SettingsReload();
-    }
-
-    public void SettingsReload()
+    public static void SettingsReload()
     {
         // Fullscreen
         if ((bool)settings["fullscreen"]) 
-        {
-            DisplayServer.WindowSetMode(DisplayServer.WindowMode.Fullscreen);
-        }
+        {DisplayServer.WindowSetMode(DisplayServer.WindowMode.Fullscreen);}
         else
-        {
-            DisplayServer.WindowSetMode(DisplayServer.WindowMode.Windowed);
-        }
+        {DisplayServer.WindowSetMode(DisplayServer.WindowMode.Windowed);}
 
         // Sensitivity
-        ((Godot.Collections.Dictionary<string, float>)settings["sens"])["sens"] = Math.Clamp(
+        ((GodotCollections.Dictionary<string, float>)settings["sens"])["value"] = Math.Clamp(
             ((GodotCollections.Dictionary<string, float>)settings["sens"])["value"],
 
             ((GodotCollections.Dictionary<string, GodotCollections.Array<float>>)settings["sens"])["locked"][0],

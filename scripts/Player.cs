@@ -30,7 +30,7 @@ public partial class Player : Node3D
 		{
 			RotateY(-Mathf.DegToRad(mouseMovement.Relative.X * playerCameraTurnSpeed));
 			playerCameraNode.RotateX(-Mathf.DegToRad(mouseMovement.Relative.Y * playerCameraTurnSpeed));
-			playerCameraNode.Rotation =  new Vector3(
+			playerCameraNode.Rotation = new Vector3(
 				Math.Clamp(playerCameraNode.Rotation.X, Mathf.DegToRad(-85F), Mathf.DegToRad(85F)),
 				playerCameraNode.Rotation.Y,
 				playerCameraNode.Rotation.Z

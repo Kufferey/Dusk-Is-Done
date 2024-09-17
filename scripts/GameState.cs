@@ -17,7 +17,7 @@ public partial class GameState : Node3D
 
 	public override void _Ready()
 	{
-		
+		Globals.SettingsReload();
 	}
 
 	public override void _Process(double delta)

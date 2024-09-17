@@ -13,7 +13,7 @@ public partial class InteractableObjectManager : Node
 	};
 
 	// Add a interaction item to "interactableObjectPrefabs".
-    public static void AddInteractableItemsToPrefabs(InteractableObject.InteractableObjectType type, String scenePath)
+    public static void AddInteractableItemToPrefabs(InteractableObject.InteractableObjectType type, String scenePath)
 	{
 		interactableObjectPrefabs.Add((InteractableObject.InteractableObjectType)type, (Godot.PackedScene)ResourceLoader.Load<PackedScene>(scenePath));
 	}
