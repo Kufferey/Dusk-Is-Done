@@ -6,6 +6,9 @@ public partial class Player : Node3D
 	public static float playerCameraTurnSpeed = ((Godot.Collections.Dictionary<string, float>)Globals.settings["sens"])["value"];
 	public static float playerCameraTurnSpeedStart = playerCameraTurnSpeed;
 
+	public static InteractableObject playerCurrentHoveredObject;
+	public static InteractableObject playerCurrentHeldItem;
+
 	[Export]
 	public Node3D playerCameraNode {get; set;}
 	[Export]

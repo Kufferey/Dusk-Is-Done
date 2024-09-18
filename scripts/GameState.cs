@@ -10,14 +10,9 @@ public partial class GameState : Node3D
 
 	public static int playerScore = 0;
 
-	[Export]
-	public InteractableObject playerCurrentHoveredObject;
-	[Export]
-	public InteractableObject playerCurrentHeldItem;
-
 	public override void _Ready()
 	{
-		Globals.SettingsReload();
+		
 	}
 
 	public override void _Process(double delta)
