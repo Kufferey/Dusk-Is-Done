@@ -32,10 +32,16 @@ public partial class InteractableObject : Node3D
 		None,
 		Random,
 		RandomTableItem,
+
 		Cherry,
 		CherrySpoiled,
+
 		Pills,
+		Bandage,
 		MedicalPills,
+		MedicalKit,
+		
+		Notebook,
 	}
 
 	private CollisionShape3D interactionBox;

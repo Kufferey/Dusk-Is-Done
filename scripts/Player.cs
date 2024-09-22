@@ -9,10 +9,14 @@ public partial class Player : Node3D
 	public static InteractableObject playerCurrentHoveredObject;
 	public static InteractableObject playerCurrentHeldItem;
 
+	public static bool canHoldItem;
+
 	[Export]
 	public Node3D playerCameraNode {get; set;}
 	[Export]
 	public Camera3D playerCamera {get; set;}
+	[Export]
+	public RayCast3D playerRaycast {get; set;}
 	[Export]
 	public Node3D playerHand {get; set;}
 
@@ -26,9 +30,10 @@ public partial class Player : Node3D
 
 	public override void _Process(double delta)
 	{
+		GetHoveredItem();
+
 		if (playerCurrentHeldItem != null)
 		{
-			GD.Print(playerHand.Position);
 			// TODO: Get off your lazy ass and add lerping.
 			playerCurrentHeldItem.Position = playerHand.GlobalPosition;
 			playerCurrentHeldItem.Rotation = playerHand.GlobalRotation;
@@ -49,12 +54,67 @@ public partial class Player : Node3D
 		}
     }
 
+	public void UseItem(InteractableObject interactableObject)
+	{
+		switch (interactableObject.objectType)
+		{
+			// OTHER:
+			case InteractableObject.InteractableObjectType.None:
+			break;
+
+			case InteractableObject.InteractableObjectType.Random:
+			// Add Rando effect.
+			break;
+
+			// MEDICAL:
+
+			case InteractableObject.InteractableObjectType.Pills:
+			// Make where it heals player to ~3-10% more health.
+			break;
+
+			case InteractableObject.InteractableObjectType.Bandage:
+			// Heals around 10-20%
+			break;
+
+			case InteractableObject.InteractableObjectType.MedicalPills:
+			// Heals 30-70%
+			break;
+
+			case InteractableObject.InteractableObjectType.MedicalKit:
+			// Always 100%
+			break;
+
+			// UTILITY:
+
+			case InteractableObject.InteractableObjectType.Notebook:
+			// Use to take notes and draw.
+			break;
+
+			default:
+			break;
+		}
+	}
+
+	public void GetHoveredItem()
+	{
+		if (playerRaycast.IsColliding())
+		{
+			GodotObject hoveredObject = playerRaycast.GetCollider();
+			if (hoveredObject is Node3D item)
+			{
+				if (item.GetParent() is InteractableObject interactableItem)
+				{
+					
+				}
+			}
+		}
+	}
+
 	public void ZoomCamera(float from, float to, Tween.EaseType easeType, bool useSens, float duration = 0.3F)
 	{
 		Tween tween = GetTree().CreateTween();
 		tween.SetEase(easeType);
 		tween.TweenProperty(playerCamera, "fov", to, duration);
-
 		if (useSens)
 		{
 			playerCameraTurnSpeed = Mathf.Abs(Mathf.Lerp(playerCameraTurnSpeed, Mathf.Abs(

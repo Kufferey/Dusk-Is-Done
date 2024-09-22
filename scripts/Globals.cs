@@ -11,6 +11,9 @@ public partial class Globals : Node
         {"player", new GodotCollections.Dictionary<string, Variant>{
             {"score", 0},
             {"highscore", 0},
+        }},
+        {"days", new GodotCollections.Array<GodotCollections.Dictionary<string, Variant>>{
+            //WIp
         }}
     };
 
@@ -20,9 +23,10 @@ public partial class Globals : Node
         {"sens", new GodotCollections.Dictionary<string, Variant>{
             {"locked", new GodotCollections.Array<float>{
                 {0.1F}, // Min value
-                {2F}    // Max value
+                {2F},   // Max value
+                {0.8F}  // Def value
             }},
-            {"value", 0.7F} // Default 0.8
+            {"value", 0.8F} // Default 0.8
         }},
 
 
@@ -31,7 +35,7 @@ public partial class Globals : Node
         {"settings_version", "0.1.0"},
     };
 
-    public static void SettingsSave()
+    public static void SaveSettings()
     {
         ConfigFile configFile = new ConfigFile();
 
@@ -50,10 +54,19 @@ public partial class Globals : Node
         configFile = null;
     }
 
+    public static void SaveData()
+    {
+        FileAccess fileAccess = FileAccess.Open("user://daySave.day", FileAccess.ModeFlags.Write);
+        fileAccess.StoreVar(saveData["days"]);
+        
+        fileAccess.Close();
+        fileAccess = null;
+    }
+
     public static void SettingsReloadSave()
     {
         SettingsReload();
-        SettingsSave();
+        SaveSettings();
     }
 
     public static void SettingsReload()
