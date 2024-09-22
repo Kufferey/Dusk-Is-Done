@@ -21,7 +21,11 @@ public partial class InteractableObject : Node3D
 	[Export]
 	public Boolean isInteractable {get; set;} = true;
 	[Export]
+	public Boolean isHolding {get; set;} = false;
+	[Export]
 	public Godot.Vector3 interactionBoxScale {get; set;} = new Godot.Vector3(3, 3, 3);
+	[Export]
+	public Godot.Vector3 holdingScale {get; set;} = new Vector3(2, 2, 2);
 
 	public enum InteractableObjectType
 	{
@@ -35,6 +39,7 @@ public partial class InteractableObject : Node3D
 	}
 
 	private CollisionShape3D interactionBox;
+
 
     public override void _Ready()
     {

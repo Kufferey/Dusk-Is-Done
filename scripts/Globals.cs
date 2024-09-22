@@ -22,7 +22,7 @@ public partial class Globals : Node
                 {0.1F}, // Min value
                 {2F}    // Max value
             }},
-            {"value", 5.8F} // Default 0.8
+            {"value", 0.7F} // Default 0.8
         }},
 
 

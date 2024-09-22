@@ -1,6 +1,7 @@
-[gd_scene load_steps=6 format=3 uid="uid://dn44rusqd22fj"]
+[gd_scene load_steps=7 format=3 uid="uid://dn44rusqd22fj"]
 
 [ext_resource type="Script" path="res://scripts/GameState.cs" id="1_17okt"]
+[ext_resource type="PackedScene" uid="uid://c35ot4uijjj3n" path="res://scenes/interactables/table_items/test.tscn" id="2_as8i7"]
 [ext_resource type="Script" path="res://scripts/Player.cs" id="2_jxq7i"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_88tpi"]
@@ -21,6 +22,9 @@ script = ExtResource("1_17okt")
 
 [node name="Interactables" type="Node" parent="."]
 
+[node name="Test" parent="Interactables" instance=ExtResource("2_as8i7")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.13768, 0, -8.73949)
+
 [node name="Environment" type="Node" parent="."]
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="Environment"]
@@ -37,11 +41,15 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -8.82389)
 
 [node name="Player" type="Node" parent="."]
 
-[node name="Player" type="Node3D" parent="Player" node_paths=PackedStringArray("playerCameraNode", "playerCamera")]
+[node name="Player" type="Node3D" parent="Player" node_paths=PackedStringArray("playerCameraNode", "playerCamera", "playerHand")]
 script = ExtResource("2_jxq7i")
 playerCameraNode = NodePath("CameraNeck")
 playerCamera = NodePath("CameraNeck/Camera3D")
+playerHand = NodePath("CameraNeck/Hand")
 
 [node name="CameraNeck" type="Node3D" parent="Player/Player"]
 
 [node name="Camera3D" type="Camera3D" parent="Player/Player/CameraNeck"]
+
+[node name="Hand" type="Node3D" parent="Player/Player/CameraNeck"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.538124, 0, -1.06665)

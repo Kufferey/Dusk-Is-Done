@@ -12,12 +12,12 @@ public partial class GameState : Node3D
 
 	public override void _Ready()
 	{
-		
+		Player.playerCurrentHeldItem = GetNode<InteractableObject>("Interactables/Test");
 	}
 
 	public override void _Process(double delta)
 	{
-		
+		GD.Print(Player.playerCurrentHeldItem);
 	}
 
 	public void ZoomCamera(float from, float to, Tween.EaseType easeType, bool useCameraSens, float duration = 0.3F)

@@ -13,6 +13,8 @@ public partial class Player : Node3D
 	public Node3D playerCameraNode {get; set;}
 	[Export]
 	public Camera3D playerCamera {get; set;}
+	[Export]
+	public Node3D playerHand {get; set;}
 
 	public override void _Ready()
 	{
@@ -24,7 +26,13 @@ public partial class Player : Node3D
 
 	public override void _Process(double delta)
 	{
-		
+		if (playerCurrentHeldItem != null)
+		{
+			GD.Print(playerHand.Position);
+			// TODO: Get off your lazy ass and add lerping.
+			playerCurrentHeldItem.Position = playerHand.GlobalPosition;
+			playerCurrentHeldItem.Rotation = playerHand.GlobalRotation;
+		}
 	}
 
     public override void _Input(InputEvent @event)
