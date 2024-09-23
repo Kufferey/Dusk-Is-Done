@@ -30,7 +30,7 @@ public partial class Player : Node3D
 
 	public override void _Process(double delta)
 	{
-		GetHoveredItem();
+		playerCurrentHoveredObject = GetHoveredItem();
 
 		if (playerCurrentHeldItem != null)
 		{
@@ -95,7 +95,7 @@ public partial class Player : Node3D
 		}
 	}
 
-	public void GetHoveredItem()
+	public InteractableObject GetHoveredItem()
 	{
 		if (playerRaycast.IsColliding())
 		{
@@ -104,10 +104,11 @@ public partial class Player : Node3D
 			{
 				if (item.GetParent() is InteractableObject interactableItem)
 				{
-					
+					return interactableItem;
 				}
 			}
 		}
+		return null;
 	}
 
 	public void ZoomCamera(float from, float to, Tween.EaseType easeType, bool useSens, float duration = 0.3F)

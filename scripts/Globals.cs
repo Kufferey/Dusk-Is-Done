@@ -13,7 +13,10 @@ public partial class Globals : Node
             {"highscore", 0},
         }},
         {"days", new GodotCollections.Array<GodotCollections.Dictionary<string, Variant>>{
-            //WIp
+            new GodotCollections.Dictionary<string, Variant>
+            {
+                {"dayNegitive1", 0},
+            }
         }}
     };
 
