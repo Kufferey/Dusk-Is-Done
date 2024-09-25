@@ -15,7 +15,7 @@ public partial class Globals : Node
         {"days", new GodotCollections.Array<GodotCollections.Dictionary<string, Variant>>{
             new GodotCollections.Dictionary<string, Variant>
             {
-                {"dayNegitive1", 0},
+                // Days
             }
         }}
     };
@@ -57,10 +57,10 @@ public partial class Globals : Node
         configFile = null;
     }
 
-    public static void SaveData()
+    public static void SaveData(string savePath, Variant toSave)
     {
-        FileAccess fileAccess = FileAccess.Open("user://daySave.day", FileAccess.ModeFlags.Write);
-        fileAccess.StoreVar(saveData["days"]);
+        FileAccess fileAccess = FileAccess.Open("user://" + savePath, FileAccess.ModeFlags.Write);
+        fileAccess.StoreVar(toSave);
         
         fileAccess.Close();
         fileAccess = null;
