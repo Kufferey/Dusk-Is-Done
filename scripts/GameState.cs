@@ -22,9 +22,9 @@ public partial class GameState : Node3D
 
 	public void ZoomCamera(float from, float to, Tween.EaseType easeType, bool useCameraSens, float duration = 0.3F)
 	{
-		if (GetNode<Node3D>("Player/Player").HasMethod("ZoomAndLockCamera") && GetNode<Node3D>("Player/Player").HasMethod("ZoomCamera"))
+		if (GetNode<Node3D>("Player/Player").HasMethod("ZoomCamera"))
 		{
-			GetNode<Node3D>("Player/Player").Callv(Player.MethodName.ZoomAndLockCamera, new Godot.Collections.Array{
+			GetNode<Node3D>("Player/Player").Callv(Player.MethodName.ZoomCamera, new Godot.Collections.Array{
 				from, to, (int)easeType, useCameraSens, duration
 			});	
 		}

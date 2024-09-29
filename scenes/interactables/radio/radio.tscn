@@ -1,0 +1,11 @@
+[gd_scene load_steps=2 format=3 uid="uid://b31riww3cqe5o"]
+
+[ext_resource type="Script" path="res://scripts/radio/Radio.cs" id="1_o7pou"]
+
+[node name="Radio" type="Node3D" node_paths=PackedStringArray("audioStreamPlayer3D")]
+script = ExtResource("1_o7pou")
+audioStreamPlayer3D = NodePath("AudioStreamPlayer3D")
+
+[node name="AudioStreamPlayer3D" type="AudioStreamPlayer3D" parent="."]
+volume_db = -1.0
+max_distance = 150.0

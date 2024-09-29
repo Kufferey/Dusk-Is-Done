@@ -1,8 +1,8 @@
 [gd_scene load_steps=7 format=3 uid="uid://dn44rusqd22fj"]
 
 [ext_resource type="Script" path="res://scripts/GameState.cs" id="1_17okt"]
-[ext_resource type="PackedScene" uid="uid://c35ot4uijjj3n" path="res://scenes/interactables/table_items/test.tscn" id="2_as8i7"]
 [ext_resource type="Script" path="res://scripts/Player.cs" id="2_jxq7i"]
+[ext_resource type="PackedScene" uid="uid://b31riww3cqe5o" path="res://scenes/interactables/radio/radio.tscn" id="2_tjt7a"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_88tpi"]
 sky_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
@@ -22,15 +22,10 @@ script = ExtResource("1_17okt")
 
 [node name="Interactables" type="Node" parent="."]
 
-[node name="Test" parent="Interactables" instance=ExtResource("2_as8i7")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.27916, 2.38419e-07, 0.424064)
+[node name="Radio" parent="Interactables" instance=ExtResource("2_tjt7a")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10.7669, 0, 0)
 
-[node name="Area3D" parent="Interactables/Test" index="1"]
-collision_layer = 255
-collision_mask = 255
-
-[node name="CollisionShape3D" parent="Interactables/Test/Area3D" index="0"]
-transform = Transform3D(3, 0, 0, 0, 3, 0, 0, 0, 3, 0, 0.572754, 0)
+[node name="CSGBox3D" type="CSGBox3D" parent="Interactables/Radio"]
 
 [node name="Environment" type="Node" parent="."]
 
@@ -62,5 +57,4 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.538124, 0, -1.06665)
 [node name="RayCast3D" type="RayCast3D" parent="Player/Player/CameraNeck"]
 target_position = Vector3(0, 0, -4)
 collide_with_areas = true
-
-[editable path="Interactables/Test"]
+debug_shape_custom_color = Color(0, 1, 0, 0.137255)
