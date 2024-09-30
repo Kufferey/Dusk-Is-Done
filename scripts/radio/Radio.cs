@@ -7,17 +7,24 @@ public partial class Radio : Node3D
 	public Godot.Collections.Dictionary<string, Variant> radioSongs {get; set;} = new Godot.Collections.Dictionary<string, Variant>
 	{
 		// KEY: Name of song, VALUE: 1: song path, 2: BPM
-		{"Song1", new Godot.Collections.Array{{"res://assets/music/radio/Song 1.ogg"},   {175}}},
-		{"Song2", new Godot.Collections.Array{{"res://assets/music/radio/Song 2.ogg"},   {130}}},
-		{"Song3", new Godot.Collections.Array{{"res://assets/music/radio/Song 3.ogg"},   {215}}},
-		{"Song4", new Godot.Collections.Array{{"res://assets/music/radio/Song 4.ogg"},   {145}}},
-		{"Song5", new Godot.Collections.Array{{"res://assets/music/radio/Song 5.ogg"},   {140}}},
-		{"Song6", new Godot.Collections.Array{{"res://assets/music/radio/Song 6.ogg"},   {155}}},
-		{"Song7", new Godot.Collections.Array{{"res://assets/music/radio/Song 7.ogg"},   {240}}},
-		{"Song8", new Godot.Collections.Array{{"res://assets/music/radio/Song 8.ogg"},   {120}}},
-		{"Song9", new Godot.Collections.Array{{"res://assets/music/radio/Song 9.ogg"},   {120}}},
-		{"Song10", new Godot.Collections.Array{{"res://assets/music/radio/Song 10.ogg"}, {130}}},
+		{"Song1", new Godot.Collections.Array{{ResourceLoader.Load("res://assets/music/radio/Song 1.ogg")},   {175}}},
+		{"Song2", new Godot.Collections.Array{{ResourceLoader.Load("res://assets/music/radio/Song 2.ogg")},   {130}}},
+		{"Song3", new Godot.Collections.Array{{ResourceLoader.Load("res://assets/music/radio/Song 3.ogg")},   {215}}},
+		{"Song4", new Godot.Collections.Array{{ResourceLoader.Load("res://assets/music/radio/Song 4.ogg")},   {145}}},
+		{"Song5", new Godot.Collections.Array{{ResourceLoader.Load("res://assets/music/radio/Song 5.ogg")},   {140}}},
+		{"Song6", new Godot.Collections.Array{{ResourceLoader.Load("res://assets/music/radio/Song 6.ogg")},   {155}}},
+		{"Song7", new Godot.Collections.Array{{ResourceLoader.Load("res://assets/music/radio/Song 7.ogg")},   {240}}},
+		{"Song8", new Godot.Collections.Array{{ResourceLoader.Load("res://assets/music/radio/Song 8.ogg")},   {120}}},
+		{"Song9", new Godot.Collections.Array{{ResourceLoader.Load("res://assets/music/radio/Song 9.ogg")},   {120}}},
+		{"Song10", new Godot.Collections.Array{{ResourceLoader.Load("res://assets/music/radio/Song 10.ogg")}, {130}}},
 	};
+
+
+	public string lastSongName;
+	public string currentSongName;
+
+	private float interval;
+	private float timer;
 
 	[Export]
 	public AudioStreamPlayer3D audioStreamPlayer3D;
@@ -26,11 +33,8 @@ public partial class Radio : Node3D
 	[Export]
 	public bool canRepeat;
 
-	public string lastSongName;
-	public string currentSongName;
-
-	private float interval;
-	private float timer;
+	[Export]
+	public AnimationPlayer animationPlayer;
 
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
@@ -43,23 +47,25 @@ public partial class Radio : Node3D
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
 	public override void _Process(double delta)
 	{
-		timer += (float)delta;
-		if (timer >= interval)
+		if (audioStreamPlayer3D.Playing)
 		{
-			timer -= interval;
-			BeatHit();
+			timer += (float)delta;
+			if (timer >= interval)
+			{
+				timer -= interval;
+				BeatHit();
+			}
 		}
 	}
 
 	public void BeatHit()
 	{
-		// Beat
+		animationPlayer.Play("beat");
 	}
 
-	public void LoadAudio(string path)
+	public void LoadAudio(AudioStream stream)
 	{
-		AudioStream audioStream = GD.Load<AudioStream>(path);
-		audioStreamPlayer3D.Stream = audioStream;
+		audioStreamPlayer3D.Stream = stream;
 	}
 
 	public void SongFinshed()
@@ -70,7 +76,7 @@ public partial class Radio : Node3D
 	private void PickRandomSong(bool canRepeat)
 	{
 		string songName;
-		string songPath;
+		AudioStream songPath;
 		int songBpm;
 
 		int maxSongs = 0;
@@ -80,12 +86,16 @@ public partial class Radio : Node3D
 
 		int randomSongNumber = GD.RandRange(1, maxSongs);
 		songName = ("Song" + randomSongNumber.ToString());
-		songPath = ((Godot.Collections.Array<string>)radioSongs[songName])[0];
+		songPath = ((Godot.Collections.Array<AudioStream>)radioSongs[songName])[0];
 		songBpm = ((Godot.Collections.Array<int>)radioSongs[songName])[1];
 		
+
 		bpm = songBpm;
 		lastSongName = currentSongName;
 		currentSongName = songName;
+
+		GD.Print(songName);
+		GD.Print(bpm);
 
 		if (!canRepeat && currentSongName == lastSongName)
 		{

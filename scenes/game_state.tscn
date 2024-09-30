@@ -25,8 +25,6 @@ script = ExtResource("1_17okt")
 [node name="Radio" parent="Interactables" instance=ExtResource("2_tjt7a")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10.7669, 0, 0)
 
-[node name="CSGBox3D" type="CSGBox3D" parent="Interactables/Radio"]
-
 [node name="Environment" type="Node" parent="."]
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="Environment"]
