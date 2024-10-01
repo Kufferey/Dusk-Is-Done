@@ -17,6 +17,13 @@ public partial class Radio : Node3D
 		{"Song8", new Godot.Collections.Array{{ResourceLoader.Load("res://assets/music/radio/Song 8.ogg")},   {120}}},
 		{"Song9", new Godot.Collections.Array{{ResourceLoader.Load("res://assets/music/radio/Song 9.ogg")},   {120}}},
 		{"Song10", new Godot.Collections.Array{{ResourceLoader.Load("res://assets/music/radio/Song 10.ogg")}, {130}}},
+		{"Song11", new Godot.Collections.Array{{ResourceLoader.Load("res://assets/music/radio/Song 10.ogg")}, {140}}},
+	};
+
+	public Godot.Collections.Dictionary<string, AudioStream> radioGlitchSounds {get; set;} = new Godot.Collections.Dictionary<string, AudioStream>
+	{
+		// KEY:
+		{"Glitch1", (AudioStream)ResourceLoader.Load("res://assets/music/electroc/Distance.ogg")},
 	};
 
 
@@ -26,12 +33,22 @@ public partial class Radio : Node3D
 	private float interval;
 	private float timer;
 
+	private int maxSongs;
+
 	[Export]
 	public AudioStreamPlayer3D audioStreamPlayer3D;
 	[Export]
 	public int bpm = 120;
 	[Export]
+	public float randomGlitchChance = 0.001F;
+	[Export]
+	public float glitchTime = 0.2F;
+	[Export]
 	public bool canRepeat;
+	[Export]
+	public bool canPlay = true;
+	[Export]
+	public bool isInGlitch = false;
 
 	[Export]
 	public AnimationPlayer animationPlayer;
@@ -39,7 +56,9 @@ public partial class Radio : Node3D
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
+		maxSongs = GetMaxAudio(radioSongs.Count);
 		PickRandomSong(canRepeat);
+
 		audioStreamPlayer3D.Finished += SongFinshed;
 		interval = 60.0F / bpm;
 	}
@@ -47,7 +66,7 @@ public partial class Radio : Node3D
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
 	public override void _Process(double delta)
 	{
-		if (audioStreamPlayer3D.Playing)
+		if (audioStreamPlayer3D.Playing && canPlay && !isInGlitch)
 		{
 			timer += (float)delta;
 			if (timer >= interval)
@@ -60,17 +79,94 @@ public partial class Radio : Node3D
 
 	public void BeatHit()
 	{
-		animationPlayer.Play("beat");
+		float chanceOfGlitch = (float)GD.RandRange(0.0F, randomGlitchChance + 0.5F);
+		GD.Print(chanceOfGlitch);
+		if (chanceOfGlitch > randomGlitchChance && !isInGlitch)
+		{
+			SongGlitch(75F, glitchTime);
+			return;
+		}
+
+		if (!isInGlitch)
+		{
+			animationPlayer.Play("beat");
+		}
 	}
 
-	public void LoadAudio(AudioStream stream)
+	private void SongGlitch(float fromVolume, float time)
 	{
+		isInGlitch = true;
+
+		float radioOriginalVolume = audioStreamPlayer3D.VolumeDb;
+		float radioOriginalPosition = audioStreamPlayer3D.GetPlaybackPosition();
+		AudioStream radioOriginalAudio = audioStreamPlayer3D.Stream;
+
+		Timer timer = new Timer();
+		timer.Autostart = true;
+		timer.WaitTime = time + 10;
+		timer.Timeout += () => {
+			EndSongGlitch(fromVolume, time, radioOriginalAudio, radioOriginalPosition, radioOriginalVolume);
+
+			timer.QueueFree();
+		};
+		AddChild(timer);
+
+		int maxGlitchSounds = GetMaxAudio(radioGlitchSounds.Count);
+		int randomGlitchSound = (int)GD.RandRange(1, maxGlitchSounds);
+		string randomSound = ("Glitch" + randomGlitchSound.ToString());
+
+		// Begining of the pre glitch sound.
+		Tween preGlitchTween = GetTree().CreateTween();
+		preGlitchTween.SetEase(Tween.EaseType.In);
+		preGlitchTween.TweenProperty(audioStreamPlayer3D, "volume_db", radioOriginalVolume - fromVolume, time);
+		preGlitchTween.TweenCallback( Callable.From(() => {
+			// Load glitch sound.
+			AudioStream audioStream = radioGlitchSounds[randomSound];
+			audioStreamPlayer3D.Stream = audioStream;
+			audioStreamPlayer3D.Play();
+
+			Tween postGlitchTween = GetTree().CreateTween();
+			postGlitchTween.SetEase(Tween.EaseType.Out);
+			postGlitchTween.TweenProperty(audioStreamPlayer3D, "volume_db", radioOriginalVolume, time);
+		}) );
+	}
+
+	private void EndSongGlitch(float fromVolume, float time, AudioStream originalAudio, float originalPosition, float originalVolume)
+	{
+		Tween tween = GetTree().CreateTween();
+		tween.SetEase(Tween.EaseType.In);
+		tween.TweenProperty(audioStreamPlayer3D, "volume_db", originalVolume - fromVolume, time);
+
+		tween.TweenCallback( Callable.From(() => {
+			audioStreamPlayer3D.Stream = originalAudio;
+			audioStreamPlayer3D.Play(originalPosition);
+
+			Tween lastTween = GetTree().CreateTween();
+			lastTween.SetEase(Tween.EaseType.Out);
+			lastTween.TweenProperty(audioStreamPlayer3D, "volume_db", originalVolume, time);
+		}) );
+		
+		isInGlitch = false;
+	}
+
+	public void LoadAudioAndPlay(AudioStream stream, bool canRepeat)
+	{
+		if (!canRepeat && currentSongName == lastSongName)
+		{
+			PickRandomSong(canRepeat);
+			return;
+		}
+
 		audioStreamPlayer3D.Stream = stream;
+		audioStreamPlayer3D.Play();
 	}
 
 	public void SongFinshed()
 	{
-		PickRandomSong(canRepeat);
+		if (!isInGlitch)
+		{
+			PickRandomSong(canRepeat);
+		}
 	}
 
 	private void PickRandomSong(bool canRepeat)
@@ -79,33 +175,24 @@ public partial class Radio : Node3D
 		AudioStream songPath;
 		int songBpm;
 
-		int maxSongs = 0;
-
-		for (int song = 1; song < radioSongs.Count + 1; song++)
-		{maxSongs = song;}
-
 		int randomSongNumber = GD.RandRange(1, maxSongs);
 		songName = ("Song" + randomSongNumber.ToString());
 		songPath = ((Godot.Collections.Array<AudioStream>)radioSongs[songName])[0];
 		songBpm = ((Godot.Collections.Array<int>)radioSongs[songName])[1];
 		
-
 		bpm = songBpm;
 		lastSongName = currentSongName;
 		currentSongName = songName;
+		
+		LoadAudioAndPlay(songPath, canRepeat);
+	}
 
-		GD.Print(songName);
-		GD.Print(bpm);
+	private int GetMaxAudio(int number)
+	{
+		int maxSongsInList = 0;
+		for (int song = 1; song < number + 1; song++)
+		{maxSongsInList = song;}
 
-		if (!canRepeat && currentSongName == lastSongName)
-		{
-			LoadAudio(songPath);
-			audioStreamPlayer3D.Play();
-		}
-		else
-		{
-			LoadAudio(songPath);
-			audioStreamPlayer3D.Play();
-		}
+		return maxSongsInList;
 	}
 }
