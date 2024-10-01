@@ -1,0 +1,19 @@
+[remap]
+
+importer="oggvorbisstr"
+type="AudioStreamOggVorbis"
+uid="uid://c7ao6yaksf7gj"
+path="res://.godot/imported/Song 5.ogg-504f08d8c7dd046f6f9d41be5ff3617d.oggvorbisstr"
+
+[deps]
+
+source_file="res://assets/music/radio/Song 5.ogg"
+dest_files=["res://.godot/imported/Song 5.ogg-504f08d8c7dd046f6f9d41be5ff3617d.oggvorbisstr"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

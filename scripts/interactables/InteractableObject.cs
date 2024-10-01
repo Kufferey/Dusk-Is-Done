@@ -16,29 +16,47 @@ public partial class InteractableObject : Node3D
 	public String objectDesc;
 	[Export(PropertyHint.Enum)]
 	public InteractableObjectType objectType;
+	[Export]
+	public AudioStream objectInteractedSound;
 
 	[ExportGroup("Item Settings")]
 	[Export]
 	public Boolean isInteractable {get; set;} = true;
 	[Export]
+	public Boolean isHolding {get; set;} = false;
+	[Export]
 	public Godot.Vector3 interactionBoxScale {get; set;} = new Godot.Vector3(3, 3, 3);
+	[Export]
+	public Godot.Vector3 holdingScale {get; set;} = new Vector3(2, 2, 2);
 
 	public enum InteractableObjectType
 	{
 		None,
 		Random,
 		RandomTableItem,
+
 		Cherry,
 		CherrySpoiled,
+
 		Pills,
+		Bandage,
 		MedicalPills,
+		MedicalKit,
+		
+		Notebook,
 	}
 
 	private CollisionShape3D interactionBox;
 
+
     public override void _Ready()
     {
 		if (interactionBox == null) interactionBox = GetNode<CollisionShape3D>("Area3D/CollisionShape3D");
+
+		ItemHovered += OnItemHovered;
+		ItemInteracted += OnItemInteracted;
+
+		OnItemInteracted(InteractableObjectType.None);
     }
 
     public override void _Process(double delta)
@@ -48,5 +66,27 @@ public partial class InteractableObject : Node3D
 			if (interactionBox == null) interactionBox = GetNode<CollisionShape3D>("Area3D/CollisionShape3D");
 			interactionBox.Scale = interactionBoxScale;
 		}
+	}
+
+	public void OnItemInteracted(InteractableObjectType type)
+	{
+		isHolding = true;
+		
+		// Audio
+		if (objectInteractedSound != null)
+		{
+			AudioStreamPlayer audioStreamPlayer = new AudioStreamPlayer();
+			audioStreamPlayer.Stream = objectInteractedSound;
+			AddChild(audioStreamPlayer);
+			audioStreamPlayer.Play();
+			audioStreamPlayer.Finished += () => {
+				audioStreamPlayer.QueueFree();
+			};
+		}
+	}
+
+	public void OnItemHovered(InteractableObjectType type)
+	{
+		
 	}
 }

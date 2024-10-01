@@ -12,8 +12,13 @@ config_version=5
 
 config/name="Dusk Is Done"
 config/tags=PackedStringArray("3d", "horror")
+run/main_scene="res://scenes/game_state.tscn"
 config/features=PackedStringArray("4.3", "C#", "Forward Plus")
 config/icon="res://icon.svg"
+
+[display]
+
+window/stretch/mode="canvas_items"
 
 [dotnet]
 

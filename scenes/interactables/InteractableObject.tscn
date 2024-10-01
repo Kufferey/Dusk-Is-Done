@@ -3,9 +3,12 @@
 [ext_resource type="Script" path="res://scripts/interactables/InteractableObject.cs" id="1_2xj0k"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_v22tb"]
+size = Vector3(1, 0.618164, 1)
 
 [node name="InteractableObject" type="Node3D"]
 script = ExtResource("1_2xj0k")
+isHolding = true
+metadata/_edit_group_ = true
 
 [node name="Model" type="Node3D" parent="."]
 
