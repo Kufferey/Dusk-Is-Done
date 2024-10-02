@@ -49,7 +49,13 @@ public partial class Radio : Node3D
 	public bool canPlay = true;
 	[Export]
 	public bool isInGlitch = false;
+	[Export]
+	public bool canGlitch = true;
+	[Export]
+	public float glitchWaitTime = 5;
 
+	[Export]
+	public Timer glitchTimer = new Timer();
 	[Export]
 	public AnimationPlayer animationPlayer;
 
@@ -58,6 +64,10 @@ public partial class Radio : Node3D
 	{
 		maxSongs = GetMaxAudio(radioSongs.Count);
 		PickRandomSong(canRepeat);
+
+		glitchTimer.WaitTime = glitchWaitTime;
+		glitchTimer.Timeout += () => {canGlitch = true;};
+		AddChild(glitchTimer);
 
 		audioStreamPlayer3D.Finished += SongFinshed;
 		interval = 60.0F / bpm;
@@ -81,21 +91,19 @@ public partial class Radio : Node3D
 	{
 		float chanceOfGlitch = (float)GD.RandRange(0.0F, randomGlitchChance + 0.5F);
 		GD.Print(chanceOfGlitch);
-		if (chanceOfGlitch > randomGlitchChance && !isInGlitch)
+		if (chanceOfGlitch > randomGlitchChance && !isInGlitch && canGlitch)
 		{
 			SongGlitch(75F, glitchTime);
 			return;
 		}
 
-		if (!isInGlitch)
-		{
-			animationPlayer.Play("beat");
-		}
+		animationPlayer.Play("beat");
 	}
 
 	private void SongGlitch(float fromVolume, float time)
 	{
 		isInGlitch = true;
+		canGlitch = false;
 
 		float radioOriginalVolume = audioStreamPlayer3D.VolumeDb;
 		float radioOriginalPosition = audioStreamPlayer3D.GetPlaybackPosition();
@@ -126,6 +134,10 @@ public partial class Radio : Node3D
 			audioStreamPlayer3D.Play();
 
 			Tween postGlitchTween = GetTree().CreateTween();
+			postGlitchTween.TweenCallback(Callable.From(() => {
+				preGlitchTween = null;
+				postGlitchTween = null;
+			}));
 			postGlitchTween.SetEase(Tween.EaseType.Out);
 			postGlitchTween.TweenProperty(audioStreamPlayer3D, "volume_db", radioOriginalVolume, time);
 		}) );
@@ -141,12 +153,18 @@ public partial class Radio : Node3D
 			audioStreamPlayer3D.Stream = originalAudio;
 			audioStreamPlayer3D.Play(originalPosition);
 
-			Tween lastTween = GetTree().CreateTween();
-			lastTween.SetEase(Tween.EaseType.Out);
-			lastTween.TweenProperty(audioStreamPlayer3D, "volume_db", originalVolume, time);
+			Tween endGlitchTween = GetTree().CreateTween();
+			endGlitchTween.TweenCallback(Callable.From(() => {
+				endGlitchTween = null;
+				tween = null;
+
+				glitchTimer.Start();
+
+				isInGlitch = false;
+			}));
+			endGlitchTween.SetEase(Tween.EaseType.Out);
+			endGlitchTween.TweenProperty(audioStreamPlayer3D, "volume_db", originalVolume, time);
 		}) );
-		
-		isInGlitch = false;
 	}
 
 	public void LoadAudioAndPlay(AudioStream stream, bool canRepeat)

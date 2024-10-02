@@ -27,6 +27,8 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10.7669, 0, 0)
 randomGlitchChance = 100.0
 glitchTime = 5.0
 
+[node name="Timer" type="Timer" parent="Interactables/Radio"]
+
 [node name="Environment" type="Node" parent="."]
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="Environment"]
