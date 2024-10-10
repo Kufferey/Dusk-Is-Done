@@ -1,10 +1,10 @@
 using Godot;
-using System;
-using System.IO;
 
 public partial class Radio : Node3D
 {
-	public Godot.Collections.Dictionary<string, Variant> radioSongs {get; set;} = new Godot.Collections.Dictionary<string, Variant>
+	/// Make it play chars themes
+	/// Glitch Overlays cur song.
+	public static Godot.Collections.Dictionary<string, Variant> radioSongs {get; set;} = new Godot.Collections.Dictionary<string, Variant>
 	{
 		// KEY: Name of song, VALUE: 1: song path, 2: BPM
 		{"Song1", new Godot.Collections.Array{{ResourceLoader.Load("res://assets/music/radio/Song 1.ogg")},   {175}}},
@@ -17,10 +17,10 @@ public partial class Radio : Node3D
 		{"Song8", new Godot.Collections.Array{{ResourceLoader.Load("res://assets/music/radio/Song 8.ogg")},   {120}}},
 		{"Song9", new Godot.Collections.Array{{ResourceLoader.Load("res://assets/music/radio/Song 9.ogg")},   {120}}},
 		{"Song10", new Godot.Collections.Array{{ResourceLoader.Load("res://assets/music/radio/Song 10.ogg")}, {130}}},
-		{"Song11", new Godot.Collections.Array{{ResourceLoader.Load("res://assets/music/radio/Song 10.ogg")}, {140}}},
+		{"Song11", new Godot.Collections.Array{{ResourceLoader.Load("res://assets/music/radio/Song 11.ogg")}, {140}}},
 	};
 
-	public Godot.Collections.Dictionary<string, AudioStream> radioGlitchSounds {get; set;} = new Godot.Collections.Dictionary<string, AudioStream>
+	public static Godot.Collections.Dictionary<string, AudioStream> radioGlitchSounds {get; set;} = new Godot.Collections.Dictionary<string, AudioStream>
 	{
 		// KEY:
 		{"Glitch1", (AudioStream)ResourceLoader.Load("res://assets/music/electroc/Distance.ogg")},
@@ -40,7 +40,7 @@ public partial class Radio : Node3D
 	[Export]
 	public int bpm = 120;
 	[Export]
-	public float randomGlitchChance = 0.001F;
+	public float randomGlitchChance = 100;
 	[Export]
 	public float glitchTime = 0.2F;
 	[Export]
@@ -89,7 +89,7 @@ public partial class Radio : Node3D
 
 	public void BeatHit()
 	{
-		float chanceOfGlitch = (float)GD.RandRange(0.0F, randomGlitchChance + 0.5F);
+		float chanceOfGlitch = (float)GD.RandRange(0.0F, randomGlitchChance + 0.2F);
 		GD.Print(chanceOfGlitch);
 		if (chanceOfGlitch > randomGlitchChance && !isInGlitch && canGlitch)
 		{
@@ -181,10 +181,9 @@ public partial class Radio : Node3D
 
 	public void SongFinshed()
 	{
-		if (!isInGlitch)
-		{
-			PickRandomSong(canRepeat);
-		}
+		if (isInGlitch) return;
+		
+		PickRandomSong(canRepeat);
 	}
 
 	private void PickRandomSong(bool canRepeat)
@@ -208,9 +207,7 @@ public partial class Radio : Node3D
 	private int GetMaxAudio(int number)
 	{
 		int maxSongsInList = 0;
-		for (int song = 1; song < number + 1; song++)
-		{maxSongsInList = song;}
-
+		for (int song = 1; song < number + 1; song++) maxSongsInList = song;
 		return maxSongsInList;
 	}
 }
