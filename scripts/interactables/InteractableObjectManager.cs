@@ -8,8 +8,13 @@ public partial class InteractableObjectManager : Node
 	{
 		{InteractableObject.InteractableObjectType.Cherry,        (Godot.PackedScene)ResourceLoader.Load<PackedScene>("")},
 		{InteractableObject.InteractableObjectType.CherrySpoiled, (Godot.PackedScene)ResourceLoader.Load<PackedScene>("")},
-		{InteractableObject.InteractableObjectType.MedicalPills,  (Godot.PackedScene)ResourceLoader.Load<PackedScene>("")},
+		
 		{InteractableObject.InteractableObjectType.Pills,         (Godot.PackedScene)ResourceLoader.Load<PackedScene>("")},
+		{InteractableObject.InteractableObjectType.Bandage,       (Godot.PackedScene)ResourceLoader.Load<PackedScene>("")},
+		{InteractableObject.InteractableObjectType.MedicalPills,  (Godot.PackedScene)ResourceLoader.Load<PackedScene>("")},
+		{InteractableObject.InteractableObjectType.MedicalKit,    (Godot.PackedScene)ResourceLoader.Load<PackedScene>("")},
+		
+		{InteractableObject.InteractableObjectType.Notebook,      (Godot.PackedScene)ResourceLoader.Load<PackedScene>("")},
 	};
 
 	// Add a interaction item to "interactableObjectPrefabs".

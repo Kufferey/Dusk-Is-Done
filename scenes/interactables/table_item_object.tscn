@@ -1,0 +1,8 @@
+[gd_scene load_steps=3 format=3 uid="uid://cctmdddh6x533"]
+
+[ext_resource type="PackedScene" uid="uid://ibp5swfilbpv" path="res://scenes/interactables/interactable_object.tscn" id="1_cdxfd"]
+[ext_resource type="Script" path="res://scripts/interactables/TableItemObject.cs" id="2_heyly"]
+
+[node name="TableItemObject" instance=ExtResource("1_cdxfd")]
+script = ExtResource("2_heyly")
+isHolding = false

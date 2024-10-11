@@ -4,7 +4,14 @@ using GodotCollections = Godot.Collections;
 
 public partial class Globals : Node
 {
+    // Game
+    public static string gameVersion = "0.0.0";
+
+    // Gameplay
     public static bool playerCanMoveCamera = true;
+    public static bool playerCanInteract = true;
+
+    // Other
 
     public static GodotCollections.Dictionary<string, Variant> saveData = new GodotCollections.Dictionary<string, Variant>
     {
@@ -23,6 +30,7 @@ public partial class Globals : Node
     public static GodotCollections.Dictionary<string, Variant> settings = new GodotCollections.Dictionary<string, Variant>
     {
         {"fullscreen", false},
+
         {"sens", new GodotCollections.Dictionary<string, Variant>{
             {"locked", new GodotCollections.Array<float>{
                 {0.1F}, // Min value
@@ -32,9 +40,15 @@ public partial class Globals : Node
             {"value", 0.8F} // Default 0.8
         }},
 
+        {"keybinds", new GodotCollections.Dictionary<string, InputEvent>{
+            {"mouseleft", null},
+            {"mouseright", null},
+            {"interact", null},
+        }},
+
 
         // Versions
-        {"version", "0.1.0"},
+        {"version", gameVersion},
         {"settings_version", "0.1.0"},
     };
 
@@ -47,6 +61,7 @@ public partial class Globals : Node
 
         // Gameplay
         configFile.SetValue("gameplay", "sensitivity", ((GodotCollections.Dictionary<string, float>)settings["sens"])["value"]);
+        configFile.SetValue("gameplay", "keybinds", settings["keybinds"]);
 
         // Misc
         configFile.SetValue("other", "version", settings["version"]);
@@ -57,16 +72,45 @@ public partial class Globals : Node
         configFile = null;
     }
 
+    public static void SetKeybind(GodotCollections.Dictionary<string, InputEvent> keybind)
+    {
+
+    }
+
     public static void SaveData(string savePath, Variant toSave)
     {
         FileAccess fileAccess = FileAccess.Open("user://" + savePath, FileAccess.ModeFlags.Write);
-        fileAccess.StoreVar(toSave);
+        fileAccess.StoreVar(toSave, true);
+
+        if (!DirAccess.DirExistsAbsolute("user://" + savePath)) DirAccess.MakeDirRecursiveAbsolute("user://" + savePath);
         
         fileAccess.Close();
         fileAccess = null;
     }
 
-    public static void SettingsReloadSave()
+    public static Variant LoadData(string path)
+    {
+        FileAccess fileAccess = FileAccess.Open("user://" + path, FileAccess.ModeFlags.Read);
+        fileAccess.GetVar(true);
+        fileAccess.Close();
+
+        return fileAccess;
+    }
+
+    public static Day LoadDay(int dayNumber) {return Day.Load("day-" + dayNumber.ToString());}
+
+    public static void SaveDay(int day, int score, GodotCollections.Array<TableItemObject> tableItems)
+    {
+        Day daySave = new Day();
+        daySave.day = day;
+        daySave.score = score;
+        daySave.tableItems = tableItems;
+
+        Day.Save(daySave, "day-" + daySave.day);
+        daySave = null;
+    }
+
+    public static void SettingsReloadSave() // this will be deleted after game releases.
     {
         SettingsReload();
         SaveSettings();
@@ -75,10 +119,8 @@ public partial class Globals : Node
     public static void SettingsReload()
     {
         // Fullscreen
-        if ((bool)settings["fullscreen"]) 
-        {DisplayServer.WindowSetMode(DisplayServer.WindowMode.Fullscreen);}
-        else
-        {DisplayServer.WindowSetMode(DisplayServer.WindowMode.Windowed);}
+        if ((bool)settings["fullscreen"]) DisplayServer.WindowSetMode(DisplayServer.WindowMode.Fullscreen);
+        else DisplayServer.WindowSetMode(DisplayServer.WindowMode.Windowed);
 
         // Sensitivity
         ((GodotCollections.Dictionary<string, float>)settings["sens"])["value"] = Math.Clamp(

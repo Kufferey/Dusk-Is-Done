@@ -1,18 +1,18 @@
 using Godot;
-using System;
 
-public partial class GameState : Node3D
+public partial class Game : Node3D
 {
 	[Signal]
 	public delegate void NewDayEventHandler();
 
 	public static int currentDay;
+	public static Difficulty.DifficultyTypes difficulty;
 
 	public static int playerScore = 0;
 
 	public override void _Ready()
 	{
-		
+		EnterGame();
 	}
 
 	public override void _Process(double delta)
@@ -20,7 +20,17 @@ public partial class GameState : Node3D
 		
 	}
 
-	public void ZoomCamera(float from, float to, Tween.EaseType easeType, bool useCameraSens, float duration = 0.3F)
+	public void EnterGame()
+	{
+
+	}
+
+	public void ExitGame()
+	{
+
+	}
+
+    public void ZoomCamera(float from, float to, Tween.EaseType easeType, bool useCameraSens, float duration = 0.3F)
 	{
 		if (GetNode<Node3D>("Player/Player").HasMethod("ZoomCamera"))
 		{

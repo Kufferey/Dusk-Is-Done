@@ -1,7 +1,7 @@
 [gd_scene load_steps=7 format=3 uid="uid://dn44rusqd22fj"]
 
-[ext_resource type="Script" path="res://scripts/GameState.cs" id="1_17okt"]
-[ext_resource type="Script" path="res://scripts/Player.cs" id="2_jxq7i"]
+[ext_resource type="Script" path="res://scripts/game/Game.cs" id="1_17okt"]
+[ext_resource type="Script" path="res://scripts/game/Player.cs" id="2_jxq7i"]
 [ext_resource type="PackedScene" uid="uid://b31riww3cqe5o" path="res://scenes/interactables/radio/radio.tscn" id="2_tjt7a"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_88tpi"]
@@ -17,17 +17,13 @@ sky = SubResource("Sky_u554q")
 tonemap_mode = 2
 glow_enabled = true
 
-[node name="GameState" type="Node3D"]
+[node name="Game" type="Node3D"]
 script = ExtResource("1_17okt")
 
 [node name="Interactables" type="Node" parent="."]
 
 [node name="Radio" parent="Interactables" instance=ExtResource("2_tjt7a")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10.7669, 0, 0)
-randomGlitchChance = 100.0
-glitchTime = 5.0
-
-[node name="Timer" type="Timer" parent="Interactables/Radio"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -17.0328, 0, 0)
 
 [node name="Environment" type="Node" parent="."]
 
