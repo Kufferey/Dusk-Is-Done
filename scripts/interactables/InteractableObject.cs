@@ -9,6 +9,8 @@ public partial class InteractableObject : Node3D
 	public delegate void ItemHoveredEventHandler(InteractableObjectType type);
 	[Signal]
 	public delegate void ItemInteractedEventHandler(InteractableObjectType type);
+	[Signal]
+	public delegate void ItemUsedEventHandler(InteractableObjectType type);
 
 	[Export]
 	public String objectName;
@@ -18,6 +20,8 @@ public partial class InteractableObject : Node3D
 	public InteractableObjectType objectType;
 	[Export]
 	public AudioStream objectInteractedSound;
+	[Export]
+	public AudioStream objectUsedSound;
 
 	[ExportGroup("Item Settings")]
 	[Export]
@@ -55,6 +59,7 @@ public partial class InteractableObject : Node3D
 
 		ItemHovered += OnItemHovered;
 		ItemInteracted += OnItemInteracted;
+		ItemUsed += OnItemUsed;
 
 		OnItemInteracted(InteractableObjectType.None);
     }
@@ -68,25 +73,77 @@ public partial class InteractableObject : Node3D
 		}
 	}
 
+	public void PlaySound(AudioStream sound)
+	{
+		AudioStreamPlayer audioStreamPlayer = new AudioStreamPlayer();
+		audioStreamPlayer.Stream = sound;
+		AddChild(audioStreamPlayer);
+		audioStreamPlayer.Play();
+		audioStreamPlayer.Finished += () => {
+			audioStreamPlayer.QueueFree();
+		};
+	}
+
 	public void OnItemInteracted(InteractableObjectType type)
 	{
 		isHolding = true;
+
+		// Scalling
+		float weight = 0.3F;
+		Scale = new Vector3(
+			Mathf.Lerp(Scale.X, holdingScale.X, weight),
+			Mathf.Lerp(Scale.Y, holdingScale.Y, weight),
+			Mathf.Lerp(Scale.Z, holdingScale.Z, weight)
+		);
 		
 		// Audio
-		if (objectInteractedSound != null)
-		{
-			AudioStreamPlayer audioStreamPlayer = new AudioStreamPlayer();
-			audioStreamPlayer.Stream = objectInteractedSound;
-			AddChild(audioStreamPlayer);
-			audioStreamPlayer.Play();
-			audioStreamPlayer.Finished += () => {
-				audioStreamPlayer.QueueFree();
-			};
-		}
+		if (objectInteractedSound != null) PlaySound(objectInteractedSound);
 	}
+
 
 	public void OnItemHovered(InteractableObjectType type)
 	{
 		
+	}
+
+	public void OnItemUsed(InteractableObjectType type)
+	{
+		if (objectUsedSound != null) PlaySound(objectUsedSound);
+		
+		switch (type)
+		{
+			case InteractableObjectType.Pills:
+
+			// Code for Pills
+
+			break;
+
+			case InteractableObjectType.Bandage:
+
+			// Code for Bandage
+
+			break;
+
+			case InteractableObjectType.MedicalPills:
+
+			// Code for MedicalPills
+
+			break;
+
+			case InteractableObjectType.MedicalKit:
+
+			// Code for MedicalKit
+
+			break;
+
+			case InteractableObjectType.Notebook:
+			
+			// Code for Notebook
+
+			break;
+
+			default:
+			break;
+		}
 	}
 }

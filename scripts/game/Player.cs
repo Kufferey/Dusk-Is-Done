@@ -12,6 +12,9 @@ public partial class Player : Node3D
 	public static bool canHoldItem;
 
 	[Export]
+	public float playerItemSway = 7F;
+
+	[Export]
 	public Node3D playerCameraNode {get; set;}
 	[Export]
 	public Camera3D playerCamera {get; set;}
@@ -34,8 +37,11 @@ public partial class Player : Node3D
 
 		if (playerCurrentHeldItem != null)
 		{
-			// TODO: Get off your lazy ass and add lerping.
-			playerCurrentHeldItem.Position = playerHand.GlobalPosition;
+			playerCurrentHeldItem.Position = new Vector3(
+				Mathf.Lerp(playerCurrentHeldItem.Position.X, playerHand.GlobalPosition.X, playerItemSway * (float)delta),
+				Mathf.Lerp(playerCurrentHeldItem.Position.Y, playerHand.GlobalPosition.Y, playerItemSway * (float)delta),
+				Mathf.Lerp(playerCurrentHeldItem.Position.Z, playerHand.GlobalPosition.Z, playerItemSway * (float)delta)
+			);
 			playerCurrentHeldItem.Rotation = playerHand.GlobalRotation;
 		}
 	}
@@ -52,6 +58,8 @@ public partial class Player : Node3D
 				playerCameraNode.Rotation.Z
 			);
 		}
+
+		if (@event is InputEventKey && @event.IsActionPressed("interact")) SetHoveredToHeld();
     }
 
 	public void UseItem(InteractableObject interactableObject)
@@ -102,14 +110,13 @@ public partial class Player : Node3D
 			GodotObject hoveredObject = playerRaycast.GetCollider();
 			if (hoveredObject is Node3D item)
 			{
-				if (item.GetParent() is InteractableObject interactableItem)
-				{
-					return interactableItem;
-				}
+				if (item.GetParent() is InteractableObject interactableItem) return interactableItem;
 			}
 		}
 		return null;
 	}
+
+	public void SetHoveredToHeld() {playerCurrentHeldItem = playerCurrentHoveredObject;}
 
 	public void ZoomCamera(float from, float to, Tween.EaseType easeType, bool useSens, float duration = 0.3F)
 	{
