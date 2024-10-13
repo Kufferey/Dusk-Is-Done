@@ -9,7 +9,7 @@ public partial class Player : Node3D
 	public static InteractableObject playerCurrentHoveredObject;
 	public static InteractableObject playerCurrentHeldItem;
 
-	public static bool canHoldItem;
+	public static bool canHoldItem = true;
 
 	[Export]
 	public float playerItemSway = 7F;
@@ -59,7 +59,11 @@ public partial class Player : Node3D
 			);
 		}
 
-		if (@event is InputEventKey && @event.IsActionPressed("interact")) SetHoveredToHeld();
+		if (@event is InputEventKey && @event.IsActionPressed("interact") && canHoldItem && playerCurrentHeldItem == null)
+		{
+			SetHoveredToHeld();
+			playerCurrentHeldItem.EmitSignal(InteractableObject.SignalName.ItemInteracted, (int)playerCurrentHeldItem.objectType);
+		}
     }
 
 	public void UseItem(InteractableObject interactableObject)
@@ -108,15 +112,16 @@ public partial class Player : Node3D
 		if (playerRaycast.IsColliding())
 		{
 			GodotObject hoveredObject = playerRaycast.GetCollider();
-			if (hoveredObject is Node3D item)
-			{
-				if (item.GetParent() is InteractableObject interactableItem) return interactableItem;
-			}
+			if (hoveredObject is Node3D item) if (item.GetParent() is InteractableObject interactableItem) return interactableItem;
 		}
 		return null;
 	}
 
-	public void SetHoveredToHeld() {playerCurrentHeldItem = playerCurrentHoveredObject;}
+	public void SetHoveredToHeld()
+	{
+		playerCurrentHeldItem = playerCurrentHoveredObject;
+		canHoldItem = false;
+	}
 
 	public void ZoomCamera(float from, float to, Tween.EaseType easeType, bool useSens, float duration = 0.3F)
 	{

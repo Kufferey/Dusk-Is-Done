@@ -60,8 +60,6 @@ public partial class InteractableObject : Node3D
 		ItemHovered += OnItemHovered;
 		ItemInteracted += OnItemInteracted;
 		ItemUsed += OnItemUsed;
-
-		OnItemInteracted(InteractableObjectType.None);
     }
 
     public override void _Process(double delta)
@@ -103,7 +101,7 @@ public partial class InteractableObject : Node3D
 
 	public void OnItemHovered(InteractableObjectType type)
 	{
-		
+		GD.Print("Hovered");
 	}
 
 	public void OnItemUsed(InteractableObjectType type)
