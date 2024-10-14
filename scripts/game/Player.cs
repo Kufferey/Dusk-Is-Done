@@ -6,10 +6,14 @@ public partial class Player : Node3D
 	public static float playerCameraTurnSpeed = ((Godot.Collections.Dictionary<string, float>)Globals.settings["sens"])["value"];
 	public static float playerCameraTurnSpeedStart = playerCameraTurnSpeed;
 
+    public static bool playerCanMoveCamera = true;
+    public static bool playerCanInteract = true;
+	public static bool playerCanHoldItem = true;
+
 	public static InteractableObject playerCurrentHoveredObject;
 	public static InteractableObject playerCurrentHeldItem;
 
-	public static bool canHoldItem = true;
+
 
 	[Export]
 	public float playerItemSway = 7F;
@@ -25,7 +29,7 @@ public partial class Player : Node3D
 
 	public override void _Ready()
 	{
-		if (Globals.playerCanMoveCamera)
+		if (playerCanMoveCamera)
 		{
 			Input.SetMouseMode(Input.MouseModeEnum.Captured);
 		}
@@ -48,7 +52,7 @@ public partial class Player : Node3D
 
     public override void _Input(InputEvent @event)
     {
-		if (@event is InputEventMouseMotion mouseMovement && Globals.playerCanMoveCamera)
+		if (@event is InputEventMouseMotion mouseMovement && playerCanMoveCamera)
 		{
 			RotateY(-Mathf.DegToRad(mouseMovement.Relative.X * playerCameraTurnSpeed));
 			playerCameraNode.RotateX(-Mathf.DegToRad(mouseMovement.Relative.Y * playerCameraTurnSpeed));
@@ -59,7 +63,7 @@ public partial class Player : Node3D
 			);
 		}
 
-		if (@event is InputEventKey && @event.IsActionPressed("interact") && canHoldItem && playerCurrentHeldItem == null)
+		if (@event is InputEventKey && @event.IsActionPressed("interact") && playerCanHoldItem && playerCurrentHeldItem == null)
 		{
 			SetHoveredToHeld();
 			playerCurrentHeldItem.EmitSignal(InteractableObject.SignalName.ItemInteracted, (int)playerCurrentHeldItem.objectType);
@@ -109,10 +113,17 @@ public partial class Player : Node3D
 
 	public InteractableObject GetHoveredItem()
 	{
+		if (!playerCanHoldItem || !playerCanInteract || playerCurrentHeldItem != null) return null;
+
 		if (playerRaycast.IsColliding())
 		{
 			GodotObject hoveredObject = playerRaycast.GetCollider();
-			if (hoveredObject is Node3D item) if (item.GetParent() is InteractableObject interactableItem) return interactableItem;
+			if (hoveredObject is Node3D item) if (item.GetParent() is InteractableObject interactableItem)
+			{
+				interactableItem.EmitSignal(InteractableObject.SignalName.ItemHovered, (int)interactableItem.objectType);
+
+				return interactableItem;
+			}
 		}
 		return null;
 	}
@@ -120,7 +131,7 @@ public partial class Player : Node3D
 	public void SetHoveredToHeld()
 	{
 		playerCurrentHeldItem = playerCurrentHoveredObject;
-		canHoldItem = false;
+		playerCanHoldItem = false;
 	}
 
 	public void ZoomCamera(float from, float to, Tween.EaseType easeType, bool useSens, float duration = 0.3F)
@@ -142,7 +153,7 @@ public partial class Player : Node3D
 		ZoomCamera(from, to, easeType, useSens, duration);
 		if (lockCam)
 		{
-			Globals.playerCanMoveCamera = false;
+			playerCanMoveCamera = false;
 			
 			playerCameraNode.LookAt(position);
 		}

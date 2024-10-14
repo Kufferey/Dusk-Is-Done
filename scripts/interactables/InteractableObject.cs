@@ -87,11 +87,10 @@ public partial class InteractableObject : Node3D
 		isHolding = true;
 
 		// Scalling
-		float weight = 0.3F;
 		Scale = new Vector3(
-			Mathf.Lerp(Scale.X, holdingScale.X, weight),
-			Mathf.Lerp(Scale.Y, holdingScale.Y, weight),
-			Mathf.Lerp(Scale.Z, holdingScale.Z, weight)
+			holdingScale.X,
+			holdingScale.Y,
+			holdingScale.Z
 		);
 		
 		// Audio
@@ -101,7 +100,7 @@ public partial class InteractableObject : Node3D
 
 	public void OnItemHovered(InteractableObjectType type)
 	{
-		GD.Print("Hovered");
+		
 	}
 
 	public void OnItemUsed(InteractableObjectType type)

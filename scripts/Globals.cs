@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using Godot;
 using GodotCollections = Godot.Collections;
 
@@ -7,9 +8,7 @@ public partial class Globals : Node
     // Game
     public static string gameVersion = "0.0.0";
 
-    // Gameplay
-    public static bool playerCanMoveCamera = true;
-    public static bool playerCanInteract = true;
+    public static string gameDaySavePath = "user://save_slots";
 
     // Other
 
@@ -19,11 +18,9 @@ public partial class Globals : Node
             {"score", 0},
             {"highscore", 0},
         }},
-        {"days", new GodotCollections.Array<GodotCollections.Dictionary<string, Variant>>{
-            new GodotCollections.Dictionary<string, Variant>
-            {
-                // Days
-            }
+        {"days", new GodotCollections.Array<GodotCollections.Dictionary<string, Day>>{
+            // Days
+            GetDays()
         }}
     };
 
@@ -108,6 +105,15 @@ public partial class Globals : Node
 
         Day.Save(daySave, ("save_slots/" + "day-" + daySave.day), ("save_slots/" + "day-" + daySave.day + "/" + "day-" + daySave.day));
         daySave = null;
+    }
+
+    public static GodotCollections.Dictionary<string, Day> GetDays()
+    {
+        string[] savedDays = DirAccess.GetDirectoriesAt(gameDaySavePath + "/");
+        GodotCollections.Dictionary<string, Day> days = new GodotCollections.Dictionary<string, Day>{};
+        foreach (string day in savedDays) days.Add(day, Day.Load(day + "/" + day));
+
+        return days;
     }
 
     public static void SettingsReloadSave() // this will be deleted after game releases.

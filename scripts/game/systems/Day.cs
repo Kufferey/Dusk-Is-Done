@@ -3,6 +3,9 @@ using Godot;
 public partial class Day : Resource
 {
 	[Export]
+	public string customName;
+
+	[Export]
 	public int day;
 	[Export]
 	public int score;
@@ -26,7 +29,7 @@ public partial class Day : Resource
 
 	public static Day Load(string path)
 	{
-		path = "user://daySlots" + path + ".res";
+		path = Globals.gameDaySavePath + "/" + path + ".res";
 		return ResourceLoader.Load<Day>(path);
 	}
 }

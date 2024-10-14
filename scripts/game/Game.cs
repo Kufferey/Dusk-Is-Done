@@ -8,14 +8,13 @@ public partial class Game : Node3D
 	[Signal]
 	public delegate void EndDayEventHandler();
 
-	public static int currentDay;
-	public static Difficulty.DifficultyTypes difficulty;
+	public static int currentDay {get; set;}
+	public static Difficulty.DifficultyTypes difficulty {get; set;}
 
-	public static int playerScore = 0;
+	public static int playerScore {get; set;}
 
 	public override void _Ready()
 	{
-		Globals.SaveDay(1, 999, new Godot.Collections.Array<TableItemObject>{null});
 		EnterGame();
 	}
 
@@ -26,7 +25,7 @@ public partial class Game : Node3D
 
 	public void EnterGame()
 	{
-
+		
 	}
 
 	public void ExitGame()

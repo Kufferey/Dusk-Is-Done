@@ -90,7 +90,6 @@ public partial class Radio : Node3D
 	public void BeatHit()
 	{
 		float chanceOfGlitch = (float)GD.RandRange(0.0F, randomGlitchChance + 0.2F);
-		GD.Print(chanceOfGlitch);
 		if (chanceOfGlitch > randomGlitchChance && !isInGlitch && canGlitch)
 		{
 			SongGlitch(75F, glitchTime);
