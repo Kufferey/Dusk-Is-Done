@@ -106,7 +106,7 @@ public partial class Globals : Node
         daySave.score = score;
         daySave.tableItems = tableItems;
 
-        Day.Save(daySave, "day-" + daySave.day);
+        Day.Save(daySave, ("save_slots/" + "day-" + daySave.day), ("save_slots/" + "day-" + daySave.day + "/" + "day-" + daySave.day));
         daySave = null;
     }
 

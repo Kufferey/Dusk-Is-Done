@@ -15,13 +15,13 @@ public partial class Day : Resource
 	[Export]
 	public Godot.Collections.Array<TableItemObject> tableItems;
 
-	public static void Save(Day daySave, string path)
+	public static void Save(Day daySave, string path, string pathToFile)
 	{
 		if (!DirAccess.DirExistsAbsolute("user://" + path)) DirAccess.MakeDirRecursiveAbsolute("user://" + path);
 
-		path = "user://daySlots" + path + ".res";
-		ResourceSaver.Save(daySave, path, ResourceSaver.SaverFlags.Compress);
-		GD.Print("File saved at: " + path);
+		pathToFile = "user://" + pathToFile + ".res";
+		ResourceSaver.Save(daySave, pathToFile, ResourceSaver.SaverFlags.Compress);
+		GD.Print("File saved at: " + pathToFile);
 	}
 
 	public static Day Load(string path)

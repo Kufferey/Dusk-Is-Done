@@ -1,9 +1,12 @@
+using System;
 using Godot;
 
 public partial class Game : Node3D
 {
 	[Signal]
 	public delegate void NewDayEventHandler();
+	[Signal]
+	public delegate void EndDayEventHandler();
 
 	public static int currentDay;
 	public static Difficulty.DifficultyTypes difficulty;
@@ -12,6 +15,7 @@ public partial class Game : Node3D
 
 	public override void _Ready()
 	{
+		Globals.SaveDay(1, 999, new Godot.Collections.Array<TableItemObject>{null});
 		EnterGame();
 	}
 

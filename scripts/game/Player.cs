@@ -9,7 +9,10 @@ public partial class Player : Node3D
 	public static InteractableObject playerCurrentHoveredObject;
 	public static InteractableObject playerCurrentHeldItem;
 
-	public static bool canHoldItem;
+	public static bool canHoldItem = true;
+
+	[Export]
+	public float playerItemSway = 7F;
 
 	[Export]
 	public Node3D playerCameraNode {get; set;}
@@ -34,8 +37,11 @@ public partial class Player : Node3D
 
 		if (playerCurrentHeldItem != null)
 		{
-			// TODO: Get off your lazy ass and add lerping.
-			playerCurrentHeldItem.Position = playerHand.GlobalPosition;
+			playerCurrentHeldItem.Position = new Vector3(
+				Mathf.Lerp(playerCurrentHeldItem.Position.X, playerHand.GlobalPosition.X, playerItemSway * (float)delta),
+				Mathf.Lerp(playerCurrentHeldItem.Position.Y, playerHand.GlobalPosition.Y, playerItemSway * (float)delta),
+				Mathf.Lerp(playerCurrentHeldItem.Position.Z, playerHand.GlobalPosition.Z, playerItemSway * (float)delta)
+			);
 			playerCurrentHeldItem.Rotation = playerHand.GlobalRotation;
 		}
 	}
@@ -51,6 +57,12 @@ public partial class Player : Node3D
 				playerCameraNode.Rotation.Y,
 				playerCameraNode.Rotation.Z
 			);
+		}
+
+		if (@event is InputEventKey && @event.IsActionPressed("interact") && canHoldItem && playerCurrentHeldItem == null)
+		{
+			SetHoveredToHeld();
+			playerCurrentHeldItem.EmitSignal(InteractableObject.SignalName.ItemInteracted, (int)playerCurrentHeldItem.objectType);
 		}
     }
 
@@ -100,15 +112,15 @@ public partial class Player : Node3D
 		if (playerRaycast.IsColliding())
 		{
 			GodotObject hoveredObject = playerRaycast.GetCollider();
-			if (hoveredObject is Node3D item)
-			{
-				if (item.GetParent() is InteractableObject interactableItem)
-				{
-					return interactableItem;
-				}
-			}
+			if (hoveredObject is Node3D item) if (item.GetParent() is InteractableObject interactableItem) return interactableItem;
 		}
 		return null;
+	}
+
+	public void SetHoveredToHeld()
+	{
+		playerCurrentHeldItem = playerCurrentHoveredObject;
+		canHoldItem = false;
 	}
 
 	public void ZoomCamera(float from, float to, Tween.EaseType easeType, bool useSens, float duration = 0.3F)

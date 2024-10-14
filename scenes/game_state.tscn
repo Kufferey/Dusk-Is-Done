@@ -1,8 +1,10 @@
-[gd_scene load_steps=7 format=3 uid="uid://dn44rusqd22fj"]
+[gd_scene load_steps=9 format=3 uid="uid://dn44rusqd22fj"]
 
 [ext_resource type="Script" path="res://scripts/game/Game.cs" id="1_17okt"]
 [ext_resource type="Script" path="res://scripts/game/Player.cs" id="2_jxq7i"]
 [ext_resource type="PackedScene" uid="uid://b31riww3cqe5o" path="res://scenes/interactables/radio/radio.tscn" id="2_tjt7a"]
+[ext_resource type="PackedScene" uid="uid://c35ot4uijjj3n" path="res://scenes/interactables/table_items/test.tscn" id="3_tkkhn"]
+[ext_resource type="AudioStream" uid="uid://b1spk2g0qjoux" path="res://assets/sounds/events/elert.ogg" id="4_vvwja"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_88tpi"]
 sky_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
@@ -24,6 +26,12 @@ script = ExtResource("1_17okt")
 
 [node name="Radio" parent="Interactables" instance=ExtResource("2_tjt7a")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -17.0328, 0, 0)
+
+[node name="Cherries" type="Node" parent="Interactables"]
+
+[node name="Test" parent="Interactables" instance=ExtResource("3_tkkhn")]
+transform = Transform3D(1.3, 0, 0, 0, 1.3, 0, 0, 0, 1.3, 3.30527, -4.76837e-07, 3.32923)
+objectInteractedSound = ExtResource("4_vvwja")
 
 [node name="Environment" type="Node" parent="."]
 
