@@ -5,6 +5,12 @@ public partial class Day : Resource
 	[Export]
 	public string customName;
 
+	[Export(PropertyHint.MultilineText)]
+	public string customEvents;
+
+	[Export]
+	public string saveGameVersion = Globals.gameVersion;
+
 	[Export]
 	public int day;
 	[Export]
@@ -16,7 +22,7 @@ public partial class Day : Resource
 	
 	public InteractableObject playerHeldItem;
 	[Export]
-	public Godot.Collections.Array<TableItemObject> tableItems;
+	public Godot.Collections.Array<InteractableObject> tableItems;
 
 	public static void Save(Day daySave, string path, string pathToFile)
 	{

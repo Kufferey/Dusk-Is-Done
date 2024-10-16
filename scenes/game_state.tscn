@@ -1,10 +1,12 @@
-[gd_scene load_steps=9 format=3 uid="uid://dn44rusqd22fj"]
+[gd_scene load_steps=11 format=3 uid="uid://dn44rusqd22fj"]
 
 [ext_resource type="Script" path="res://scripts/game/Game.cs" id="1_17okt"]
 [ext_resource type="Script" path="res://scripts/game/Player.cs" id="2_jxq7i"]
 [ext_resource type="PackedScene" uid="uid://b31riww3cqe5o" path="res://scenes/interactables/radio/radio.tscn" id="2_tjt7a"]
+[ext_resource type="PackedScene" uid="uid://7doxy6mx53u8" path="res://scenes/interactables/table/Table.tscn" id="3_duk5y"]
 [ext_resource type="PackedScene" uid="uid://c35ot4uijjj3n" path="res://scenes/interactables/table_items/test.tscn" id="3_tkkhn"]
 [ext_resource type="AudioStream" uid="uid://b1spk2g0qjoux" path="res://assets/sounds/events/elert.ogg" id="4_vvwja"]
+[ext_resource type="PackedScene" uid="uid://cmfrs1sfxlvnn" path="res://scenes/ui/game_ui.tscn" id="6_mdlwj"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_88tpi"]
 sky_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
@@ -26,6 +28,9 @@ script = ExtResource("1_17okt")
 
 [node name="Radio" parent="Interactables" instance=ExtResource("2_tjt7a")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -17.0328, 0, 0)
+
+[node name="Table" parent="Interactables" instance=ExtResource("3_duk5y")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.15839, 0, -1.55396)
 
 [node name="Cherries" type="Node" parent="Interactables"]
 
@@ -51,12 +56,15 @@ shadow_enabled = true
 
 [node name="Player" type="Node" parent="."]
 
-[node name="Player" type="Node3D" parent="Player" node_paths=PackedStringArray("playerCameraNode", "playerCamera", "playerRaycast", "playerHand")]
+[node name="Player" type="Node3D" parent="Player" node_paths=PackedStringArray("playerCameraNode", "playerCamera", "playerRaycast", "playerHand", "playerUi")]
 script = ExtResource("2_jxq7i")
 playerCameraNode = NodePath("CameraNeck")
 playerCamera = NodePath("CameraNeck/Camera3D")
 playerRaycast = NodePath("CameraNeck/RayCast3D")
 playerHand = NodePath("CameraNeck/Hand")
+playerUi = NodePath("GameUi")
+
+[node name="GameUi" parent="Player/Player" instance=ExtResource("6_mdlwj")]
 
 [node name="CameraNeck" type="Node3D" parent="Player/Player"]
 

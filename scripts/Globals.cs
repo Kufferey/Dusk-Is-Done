@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using System.Runtime.InteropServices;
 using Godot;
 using GodotCollections = Godot.Collections;
 
@@ -94,11 +95,15 @@ public partial class Globals : Node
         return fileAccess;
     }
 
-    public static Day LoadDay(int dayNumber) {return Day.Load("day-" + dayNumber.ToString());}
+    public static Day LoadDay(int dayNumber) {return Day.Load("day-" + dayNumber.ToString() + "/" + "day-" + dayNumber.ToString());}
 
-    public static void SaveDay(int day, int score, GodotCollections.Array<TableItemObject> tableItems)
+    public static void SaveDay(int day, int score, GodotCollections.Array<InteractableObject> tableItems, string customSaveName = "", string customEvents = "")
     {
         Day daySave = new Day();
+
+        daySave.customName = customSaveName;
+        daySave.customEvents = customEvents;
+
         daySave.day = day;
         daySave.score = score;
         daySave.tableItems = tableItems;
@@ -109,7 +114,10 @@ public partial class Globals : Node
 
     public static GodotCollections.Dictionary<string, Day> GetDays()
     {
+        if (!DirAccess.DirExistsAbsolute(gameDaySavePath + "/")) return null;
+        
         string[] savedDays = DirAccess.GetDirectoriesAt(gameDaySavePath + "/");
+
         GodotCollections.Dictionary<string, Day> days = new GodotCollections.Dictionary<string, Day>{};
         foreach (string day in savedDays) days.Add(day, Day.Load(day + "/" + day));
 

@@ -6,16 +6,16 @@ using System;
 public partial class InteractableObject : Node3D
 {
 	[Signal]
-	public delegate void ItemHoveredEventHandler(InteractableObjectType type);
+	public delegate void ItemHoveredEventHandler(InteractableObject interactableObject);
 	[Signal]
-	public delegate void ItemInteractedEventHandler(InteractableObjectType type);
+	public delegate void ItemInteractedEventHandler(InteractableObject interactableObject);
 	[Signal]
-	public delegate void ItemUsedEventHandler(InteractableObjectType type);
+	public delegate void ItemUsedEventHandler(InteractableObject interactableObject);
 
 	[Export]
-	public String objectName;
+	public string objectName;
 	[Export(PropertyHint.MultilineText)]
-	public String objectDesc;
+	public string objectDesc;
 	[Export(PropertyHint.Enum)]
 	public InteractableObjectType objectType;
 	[Export]
@@ -25,9 +25,9 @@ public partial class InteractableObject : Node3D
 
 	[ExportGroup("Item Settings")]
 	[Export]
-	public Boolean isInteractable {get; set;} = true;
+	public bool isInteractable {get; set;} = true;
 	[Export]
-	public Boolean isHolding {get; set;} = false;
+	public bool isHolding {get; set;} = false;
 	[Export]
 	public Godot.Vector3 interactionBoxScale {get; set;} = new Godot.Vector3(3, 3, 3);
 	[Export]
@@ -71,18 +71,26 @@ public partial class InteractableObject : Node3D
 		}
 	}
 
-	public void PlaySound(AudioStream sound)
+	public void PlaySound(bool condition, AudioStream sound)
 	{
-		AudioStreamPlayer audioStreamPlayer = new AudioStreamPlayer();
-		audioStreamPlayer.Stream = sound;
-		AddChild(audioStreamPlayer);
-		audioStreamPlayer.Play();
-		audioStreamPlayer.Finished += () => {
-			audioStreamPlayer.QueueFree();
-		};
+		if (condition)
+		{
+			AudioStreamPlayer audioStreamPlayer = new AudioStreamPlayer();
+			audioStreamPlayer.Stream = sound;
+			AddChild(audioStreamPlayer);
+			audioStreamPlayer.Play();
+			audioStreamPlayer.Finished += () => {
+				audioStreamPlayer.QueueFree();
+			};
+		}
 	}
 
-	public void OnItemInteracted(InteractableObjectType type)
+	public void OnItemHovered(InteractableObject interactableObject)
+	{
+		
+	}
+
+	public void OnItemInteracted(InteractableObject interactableObject)
 	{
 		isHolding = true;
 
@@ -94,20 +102,14 @@ public partial class InteractableObject : Node3D
 		);
 		
 		// Audio
-		if (objectInteractedSound != null) PlaySound(objectInteractedSound);
+		PlaySound(objectInteractedSound != null, objectInteractedSound);
 	}
 
-
-	public void OnItemHovered(InteractableObjectType type)
+	public void OnItemUsed(InteractableObject interactableObject)
 	{
+		PlaySound(objectUsedSound != null, objectUsedSound);
 		
-	}
-
-	public void OnItemUsed(InteractableObjectType type)
-	{
-		if (objectUsedSound != null) PlaySound(objectUsedSound);
-		
-		switch (type)
+		switch (interactableObject.objectType)
 		{
 			case InteractableObjectType.Pills:
 

@@ -8,10 +8,13 @@ public partial class Game : Node3D
 	[Signal]
 	public delegate void EndDayEventHandler();
 
+	[Signal]
+	public delegate void TableItemAddedEventHandler(int atPos, InteractableObject.InteractableObjectType interactableType);
+	[Signal]
+	public delegate void TableItemRemovedEventHandler(int atPos, InteractableObject.InteractableObjectType interactableType);
+
 	public static int currentDay {get; set;}
 	public static Difficulty.DifficultyTypes difficulty {get; set;}
-
-	public static int playerScore {get; set;}
 
 	public override void _Ready()
 	{
@@ -25,7 +28,7 @@ public partial class Game : Node3D
 
 	public void EnterGame()
 	{
-		
+
 	}
 
 	public void ExitGame()
@@ -33,7 +36,7 @@ public partial class Game : Node3D
 
 	}
 
-    public void ZoomCamera(float from, float to, Tween.EaseType easeType, bool useCameraSens, float duration = 0.3F)
+    public void PlayerZoomCamera(float from, float to, Tween.EaseType easeType, bool useCameraSens, float duration = 0.3F)
 	{
 		if (GetNode<Node3D>("Player/Player").HasMethod("ZoomCamera"))
 		{
@@ -43,7 +46,7 @@ public partial class Game : Node3D
 		}
 	}
 
-	public void ZoomAndLockCamera(float from, float to, Vector3 position, Tween.EaseType easeType, bool useSens, bool lockCam, float duration = 0.3F)
+	public void PlayerZoomAndLockCamera(float from, float to, Vector3 position, Tween.EaseType easeType, bool useSens, bool lockCam, float duration = 0.3F)
 	{
 		if (GetNode<Node3D>("Player/Player").HasMethod("ZoomAndLockCamera"))
 		{
@@ -53,9 +56,10 @@ public partial class Game : Node3D
 		}
 	}
 
-	public void AddTableItem(InteractableObject.InteractableObjectType type)
+	public void StoreTableItem(InteractableObject.InteractableObjectType type)
 	{
-		Node tableItem = InteractableObjectManager.interactableObjectPrefabs[type].Instantiate();
-		GetNode<Node>("Interactables").AddChild(tableItem);
+		// if ( > (int)(tableItemsAllowedRow + tableItemsAllowedCollumn)) return;
+
+
 	}
 }
