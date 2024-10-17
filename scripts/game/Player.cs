@@ -76,7 +76,7 @@ public partial class Player : Node3D
 
 	public InteractableObject GetHoveredItem()
 	{
-		if (!playerCanHoldItem || !playerCanInteract || playerCurrentHeldItem != null) return null;
+		if (!playerCanHoldItem || !playerCanInteract || playerCurrentHeldItem != null) {playerUi.ChangeUi(GameUi.InteractionIconsEnum.None, ""); return null;}
 
 		if (playerRaycast.IsColliding())
 		{
@@ -84,10 +84,13 @@ public partial class Player : Node3D
 			if (hoveredObject is Node3D item) if (item.GetParent() is InteractableObject interactableItem)
 			{
 				interactableItem.EmitSignal(InteractableObject.SignalName.ItemHovered, (int)interactableItem.objectType);
+				playerUi.ChangeUi(GameUi.InteractionIconsEnum.Normal, "Press [E] to interact");
 
 				return interactableItem;
 			}
 		}
+
+		playerUi.ChangeUi(GameUi.InteractionIconsEnum.None, "");
 		return null;
 	}
 

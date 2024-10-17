@@ -21,8 +21,9 @@ sky = SubResource("Sky_u554q")
 tonemap_mode = 2
 glow_enabled = true
 
-[node name="Game" type="Node3D"]
+[node name="Game" type="Node3D" node_paths=PackedStringArray("player")]
 script = ExtResource("1_17okt")
+player = NodePath("Player/Player")
 
 [node name="Interactables" type="Node" parent="."]
 

@@ -16,6 +16,9 @@ public partial class Game : Node3D
 	public static int currentDay {get; set;}
 	public static Difficulty.DifficultyTypes difficulty {get; set;}
 
+	[Export]
+	public Player player {get; set;}
+
 	public override void _Ready()
 	{
 		EnterGame();
@@ -28,19 +31,19 @@ public partial class Game : Node3D
 
 	public void EnterGame()
 	{
-
+		// Load all game assets and set variables.
 	}
 
 	public void ExitGame()
 	{
-
+		// Unload all game assets.
 	}
 
     public void PlayerZoomCamera(float from, float to, Tween.EaseType easeType, bool useCameraSens, float duration = 0.3F)
 	{
-		if (GetNode<Node3D>("Player/Player").HasMethod("ZoomCamera"))
+		if (player.HasMethod("ZoomCamera"))
 		{
-			GetNode<Node3D>("Player/Player").Callv(Player.MethodName.ZoomCamera, new Godot.Collections.Array{
+			player.Callv(Player.MethodName.ZoomCamera, new Godot.Collections.Array{
 				from, to, (int)easeType, useCameraSens, duration
 			});	
 		}
@@ -48,9 +51,9 @@ public partial class Game : Node3D
 
 	public void PlayerZoomAndLockCamera(float from, float to, Vector3 position, Tween.EaseType easeType, bool useSens, bool lockCam, float duration = 0.3F)
 	{
-		if (GetNode<Node3D>("Player/Player").HasMethod("ZoomAndLockCamera"))
+		if (player.HasMethod("ZoomAndLockCamera"))
 		{
-			GetNode<Node3D>("Player/Player").Callv(Player.MethodName.ZoomAndLockCamera, new Godot.Collections.Array{
+			player.Callv(Player.MethodName.ZoomAndLockCamera, new Godot.Collections.Array{
 				from, to, position, (int)easeType, useSens, lockCam, duration
 			});	
 		}
@@ -60,6 +63,11 @@ public partial class Game : Node3D
 	{
 		// if ( > (int)(tableItemsAllowedRow + tableItemsAllowedCollumn)) return;
 
+
+	}
+
+	public void AddInteractableObject(InteractableObject.InteractableObjectType type, Vector3 position)
+	{
 
 	}
 }
