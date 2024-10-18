@@ -1,0 +1,19 @@
+[gd_scene load_steps=3 format=3 uid="uid://ibp5swfilbpv"]
+
+[ext_resource type="Script" path="res://scripts/interactables/InteractableObject.cs" id="1_2xj0k"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_v22tb"]
+size = Vector3(1, 0.618164, 1)
+
+[node name="InteractableObject" type="Node3D"]
+transform = Transform3D(1.3, 0, 0, 0, 1.3, 0, 0, 0, 1.3, 0, 0, 0)
+script = ExtResource("1_2xj0k")
+metadata/_edit_group_ = true
+
+[node name="Model" type="Node3D" parent="."]
+
+[node name="Area3D" type="Area3D" parent="."]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Area3D"]
+transform = Transform3D(3, 0, 0, 0, 3, 0, 0, 0, 3, 0, 0, 0)
+shape = SubResource("BoxShape3D_v22tb")
