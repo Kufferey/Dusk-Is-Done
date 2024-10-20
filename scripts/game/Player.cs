@@ -45,12 +45,19 @@ public partial class Player : Node3D
 
 		if (IsPlayerHoldingItem())
 		{
-			playerCurrentHeldItem.Position = new Vector3(
-				Mathf.Lerp(playerCurrentHeldItem.Position.X, playerHand.GlobalPosition.X, playerItemSway * (float)delta),
-				Mathf.Lerp(playerCurrentHeldItem.Position.Y, playerHand.GlobalPosition.Y, playerItemSway * (float)delta),
-				Mathf.Lerp(playerCurrentHeldItem.Position.Z, playerHand.GlobalPosition.Z, playerItemSway * (float)delta)
+			if (playerCurrentHeldItem.Scale != playerCurrentHeldItem.holdingScale) playerCurrentHeldItem.Scale = new Vector3(
+				Mathf.Lerp(playerCurrentHeldItem.Scale.X, playerCurrentHeldItem.holdingScale.X, playerItemSway * (float)delta),
+				Mathf.Lerp(playerCurrentHeldItem.Scale.Y, playerCurrentHeldItem.holdingScale.Y, playerItemSway * (float)delta),
+				Mathf.Lerp(playerCurrentHeldItem.Scale.Z, playerCurrentHeldItem.holdingScale.Z, playerItemSway * (float)delta)
 			);
 			playerCurrentHeldItem.Rotation = playerHand.GlobalRotation;
+
+			Vector3 newOffset = playerHand.GlobalPosition + playerCurrentHeldItem.holdingOffset;
+			playerCurrentHeldItem.Position = new Vector3(
+				Mathf.Lerp(playerCurrentHeldItem.Position.X, newOffset.X, playerItemSway * (float)delta),
+				Mathf.Lerp(playerCurrentHeldItem.Position.Y, newOffset.Y, playerItemSway * (float)delta),
+				Mathf.Lerp(playerCurrentHeldItem.Position.Z, newOffset.Z, playerItemSway * (float)delta)
+			);
 		}
 	}
 
@@ -76,33 +83,31 @@ public partial class Player : Node3D
 
 	public static bool IsPlayerHoldingItemType(InteractableObject.InteractableObjectType type)
 	{
-		if (Player.playerCurrentHeldItem != null && (InteractableObject.InteractableObjectType)Player.playerCurrentHeldItem.objectType == type) return true;
+		if (IsPlayerHoldingItem() && (InteractableObject.InteractableObjectType)playerCurrentHeldItem.objectType == type) return true;
 		return false;
 	}
 
 	public static bool IsPlayerHoldingItem()
 	{
-		if (Player.playerCurrentHeldItem != null) return true;
+		if (playerCurrentHeldItem != null) return true;
 		return false;
 	}
 
 	public InteractableObject GetHoveredItem()
 	{
-		if (!playerCanHoldItem || !playerCanInteract || playerCurrentHeldItem != null) {playerUi.ChangeUi(GameUi.InteractionIconsEnum.None, ""); return null;}
-
-		if (playerRaycast.IsColliding())
+		if (!playerCanHoldItem || !playerCanInteract || playerCurrentHeldItem != null || !playerRaycast.IsColliding()) {playerUi?.ChangeUi(GameUi.InteractionIconsEnum.None, ""); return null;}
+		
+		GodotObject hoveredObject = playerRaycast.GetCollider();
+		if (hoveredObject is Node3D item) if (item?.GetParent() is InteractableObject interactableItem)
 		{
-			GodotObject hoveredObject = playerRaycast.GetCollider();
-			if (hoveredObject is Node3D item) if (item.GetParent() is InteractableObject interactableItem)
-			{
-				interactableItem.EmitSignal(InteractableObject.SignalName.ItemHovered, (int)interactableItem.objectType);
-				playerUi.ChangeUi(GameUi.InteractionIconsEnum.Normal, "Press [E] to Pickup: " + interactableItem.objectName.ToString());
+			interactableItem.EmitSignal(InteractableObject.SignalName.ItemHovered, (int)interactableItem.objectType);
+			playerUi?.ChangeUi(GameUi.InteractionIconsEnum.Normal, "Press [E] to Pickup: " + interactableItem.objectName?.ToString());
 
-				return interactableItem;
-			}
+			return interactableItem;
 		}
+		
 
-		playerUi.ChangeUi(GameUi.InteractionIconsEnum.None, "");
+		playerUi?.ChangeUi(GameUi.InteractionIconsEnum.None, "");
 		return null;
 	}
 

@@ -22,7 +22,8 @@ public partial class Game : Node3D
 	public override void _Ready()
 	{
 		InteractableObjectManager.AddInteractableItemToPrefabs(InteractableObject.InteractableObjectType.None, "res://scenes/interactables/table_items/test.tscn");
-		AddInteractableObject(InteractableObject.InteractableObjectType.None, new Vector3(3,3,3), new Vector3(0,0,0));
+		// AddInteractableObject(InteractableObject.InteractableObjectType.None, new Vector3(2,2,2), new Vector3(2,2,2));
+		
 		EnterGame();
 	}
 

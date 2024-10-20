@@ -57,6 +57,8 @@ playerUi = NodePath("GameUi")
 
 [node name="GameUi" parent="Player/Player" instance=ExtResource("6_mdlwj")]
 
+[node name="MainHand" type="Node3D" parent="Player/Player"]
+
 [node name="CameraNeck" type="Node3D" parent="Player/Player"]
 
 [node name="Camera3D" type="Camera3D" parent="Player/Player/CameraNeck"]

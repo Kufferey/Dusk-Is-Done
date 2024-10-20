@@ -1,6 +1,4 @@
 using System;
-using System.Linq;
-using System.Runtime.InteropServices;
 using Godot;
 using GodotCollections = Godot.Collections;
 
@@ -10,8 +8,6 @@ public partial class Globals : Node
     public static string gameVersion = "0.0.0";
 
     public static string gameDaySavePath = "user://save_slots";
-
-    // Other
 
     public static GodotCollections.Dictionary<string, Variant> saveData = new GodotCollections.Dictionary<string, Variant>
     {

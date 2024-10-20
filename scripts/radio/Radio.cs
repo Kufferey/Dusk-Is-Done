@@ -4,7 +4,7 @@ public partial class Radio : Node3D
 {
 	/// Make it play chars themes
 	/// Glitch Overlays cur song.
-	public static Godot.Collections.Dictionary<string, Variant> radioSongs {get; set;} = new Godot.Collections.Dictionary<string, Variant>
+	public Godot.Collections.Dictionary<string, Variant> radioSongs {get; set;} = new Godot.Collections.Dictionary<string, Variant>
 	{
 		// KEY: Name of song, VALUE: 1: song path, 2: BPM
 		{"Song1", new Godot.Collections.Array{{ResourceLoader.Load("res://assets/music/radio/Song 1.ogg")},   {175}}},
@@ -20,7 +20,7 @@ public partial class Radio : Node3D
 		{"Song11", new Godot.Collections.Array{{ResourceLoader.Load("res://assets/music/radio/Song 11.ogg")}, {140}}},
 	};
 
-	public static Godot.Collections.Dictionary<string, AudioStream> radioGlitchSounds {get; set;} = new Godot.Collections.Dictionary<string, AudioStream>
+	public Godot.Collections.Dictionary<string, AudioStream> radioGlitchSounds {get; set;} = new Godot.Collections.Dictionary<string, AudioStream>
 	{
 		// KEY:
 		{"Glitch1", (AudioStream)ResourceLoader.Load("res://assets/music/electroc/Distance.ogg")},

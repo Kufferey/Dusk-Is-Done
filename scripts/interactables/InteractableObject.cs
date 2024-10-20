@@ -1,3 +1,4 @@
+using System.Diagnostics.CodeAnalysis;
 using Godot;
 
 [Tool]
@@ -31,6 +32,8 @@ public partial class InteractableObject : Node3D
 	public Godot.Vector3 interactionBoxScale {get; set;} = new Godot.Vector3(3, 3, 3);
 	[Export]
 	public Godot.Vector3 holdingScale {get; set;} = new Vector3(2, 2, 2);
+	[Export]
+	public Godot.Vector3 holdingOffset {get; set;}
 
 	public enum InteractableObjectType
 	{
@@ -50,7 +53,6 @@ public partial class InteractableObject : Node3D
 	}
 
 	private CollisionShape3D interactionBox;
-
 
     public override void _Ready()
     {
