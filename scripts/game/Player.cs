@@ -13,7 +13,7 @@ public partial class Player : Node3D
 	public static InteractableObject playerCurrentHoveredObject;
 	public static InteractableObject playerCurrentHeldItem;
 
-	public static float playerHealth = 10.0F;
+	public static int playerHealth = 100;
 	public static int playerScore;
 
 	[Export]
@@ -81,6 +81,12 @@ public partial class Player : Node3D
 		}
     }
 
+	public static bool IsPlayerDead()
+	{
+		if (playerHealth > 0) return false;
+		return true;
+	}
+
 	public static bool IsPlayerHoldingItemType(InteractableObject.InteractableObjectType type)
 	{
 		if (IsPlayerHoldingItem() && (InteractableObject.InteractableObjectType)playerCurrentHeldItem.objectType == type) return true;
@@ -105,11 +111,12 @@ public partial class Player : Node3D
 
 			return interactableItem;
 		}
-		
 
-		playerUi?.ChangeUi(GameUi.InteractionIconsEnum.None, "");
 		return null;
 	}
+
+	public void UiToggle() => playerUi.Visible = !playerUi.Visible;
+	
 
 	public void SetHoveredToHeld()
 	{
@@ -143,8 +150,6 @@ public partial class Player : Node3D
 		}
 	}
 
-	public float GetCameraZoom()
-	{
-		return playerCamera.Fov;
-	}
+	public float GetCameraZoom() {return (float)playerCamera.Fov;}
+	
 }

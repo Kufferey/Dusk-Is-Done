@@ -8,21 +8,20 @@ public partial class Game : Node3D
 	[Signal]
 	public delegate void EndDayEventHandler();
 
-	[Signal]
-	public delegate void TableItemAddedEventHandler(int atPos, InteractableObject.InteractableObjectType interactableType);
-	[Signal]
-	public delegate void TableItemRemovedEventHandler(int atPos, InteractableObject.InteractableObjectType interactableType);
-
-	public static int currentDay {get; set;}
 	public static Difficulty.DifficultyTypes? difficulty {get; set;}
+	public static int currentDay {get; set;}
+	public static int currentSection {get; set;}
 
 	[Export]
 	public Player player {get; set;}
 
+	[Export]
+	public Table table {get; set;}
+
 	public override void _Ready()
 	{
 		InteractableObjectManager.AddInteractableItemToPrefabs(InteractableObject.InteractableObjectType.None, "res://scenes/interactables/table_items/test.tscn");
-		// AddInteractableObject(InteractableObject.InteractableObjectType.None, new Vector3(2,2,2), new Vector3(2,2,2));
+		AddInteractableObject(InteractableObject.InteractableObjectType.None, new Vector3(2,2,2), new Vector3(0,0,0));
 		
 		EnterGame();
 	}
@@ -49,6 +48,11 @@ public partial class Game : Node3D
 		
 		if (cherryAmount > 0) return false;
 		return true;
+	}
+
+	public void NewSection()
+	{
+
 	}
 
     public void PlayerZoomCamera(float from, float to, Tween.EaseType easeType, bool useCameraSens, float duration = 0.3F)
@@ -86,7 +90,7 @@ public partial class Game : Node3D
 
 	public void OnItemInteracted(InteractableObject.InteractableObjectType type)
 	{
-		
+		GD.Print("Inter");
 	}
 
 	public void OnItemUsed(InteractableObject.InteractableObjectType type)
