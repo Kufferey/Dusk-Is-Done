@@ -1,4 +1,5 @@
 using System;
+using static Godot.GD;
 using Godot;
 
 public partial class Game : Node3D
@@ -13,22 +14,22 @@ public partial class Game : Node3D
 	public static int currentSection {get; set;}
 
 	[Export]
-	public Player player {get; set;}
+	private Player player {get; set;}
 
 	[Export]
-	public Table table {get; set;}
+	private Table table {get; set;}
+
+	private int maxCherries = 6;
+	private int currentCherries;
 
 	public override void _Ready()
 	{
-		InteractableObjectManager.AddInteractableItemToPrefabs(InteractableObject.InteractableObjectType.None, "res://scenes/interactables/table_items/test.tscn");
-		AddInteractableObject(InteractableObject.InteractableObjectType.None, new Vector3(2,2,2), new Vector3(0,0,0));
-		
 		EnterGame();
 	}
 
 	public override void _Process(double delta)
 	{
-		
+		if (IsSectionClear()) NewSection();
 	}
 
 	public void EnterGame()
@@ -41,18 +42,51 @@ public partial class Game : Node3D
 		// Unload all game assets and null variables.
 	}
 
-	public bool IsSectionClear()
+	private bool IsSectionClear()
 	{
-		int cherryAmount = 0;
-		for (int cherry = 0; cherry < GetNode<Node>("Interactables/Cherries").GetChildren().Count; cherry++) cherryAmount++;
+		int cherryAmount = GetNode<Node>("Interactables/Cherry/Cherries").GetChildCount();
 		
 		if (cherryAmount > 0) return false;
 		return true;
 	}
 
-	public void NewSection()
+	private void NewSection()
 	{
+		Print("NEW SECTION");
+		AddCherries(3);
 
+		currentSection++;
+	}
+
+	private Godot.Collections.Array<Vector3> GetSpawnPoints()
+	{
+		Godot.Collections.Array<Vector3> positions = new Godot.Collections.Array<Vector3>{};
+		Godot.Collections.Array<Node> spawnPoints = GetNode<Node>("Interactables/Cherry/SpawnPoints").GetChildren();
+
+		foreach (Node3D node in spawnPoints) positions.Add(node.Position);
+
+		return positions;
+	}
+
+	private Vector3 GetRandomSpawnPoint()
+	{
+		Godot.Collections.Array<Vector3> spawnPoints = GetSpawnPoints();
+		var randomVector = RandRange(0, GetSpawnPoints().Count - 1);
+		var randomSpawnPosition = spawnPoints[randomVector];
+		Print($"Returned: {randomSpawnPosition}\n RandomIndex: {randomVector}");
+
+		return (Vector3)randomSpawnPosition;
+	}
+
+	private void AddCherries(int amount)
+	{
+		// TODO: GODOT DOES NOT LIKE RANDOMRANGE FOR LOOPS. "randomPosition', the random positions work. NVM Fixed. // TO KEEP NOTE USING GODOT C# - (Skill issue. I forgot to decrement by 1)
+		currentCherries = 0;
+		for (int cherries = 0; cherries < amount; cherries++)
+		{
+			AddInteractableObject(InteractableObject.InteractableObjectType.Cherry, GetRandomSpawnPoint(), new Vector3(0,0,0), "Interactables/Cherry/Cherries");
+			currentCherries++;
+		}
 	}
 
     public void PlayerZoomCamera(float from, float to, Tween.EaseType easeType, bool useCameraSens, float duration = 0.3F)
@@ -90,7 +124,16 @@ public partial class Game : Node3D
 
 	public void OnItemInteracted(InteractableObject.InteractableObjectType type)
 	{
-		GD.Print("Inter");
+		switch (type)
+		{
+			case InteractableObject.InteractableObjectType.None:
+
+				Player.playerHealth -= 50.0F;
+
+			break;
+
+			default: break;
+		}
 	}
 
 	public void OnItemUsed(InteractableObject.InteractableObjectType type)
@@ -98,7 +141,7 @@ public partial class Game : Node3D
 
 	}
 
-	public void AddInteractableObject(InteractableObject.InteractableObjectType type, Vector3 position, Vector3 rotation)
+	public void AddInteractableObject(InteractableObject.InteractableObjectType type, Vector3 position = default, Vector3 rotation = default, string nodePath = "Interactables")
 	{
 		InteractableObject interactableObject = InteractableObjectManager.interactableObjectPrefabs[type].Instantiate<InteractableObject>(PackedScene.GenEditState.Disabled);
 
@@ -108,9 +151,9 @@ public partial class Game : Node3D
 		interactableObject.ItemUsed += OnItemUsed;
 
 		// Item position, and rotation
-		interactableObject.Position = position;
-		interactableObject.Rotation = rotation;
+		interactableObject.Position = (Vector3)position;
+		interactableObject.Rotation = (Vector3)rotation;
 
-		GetNode<Node>("Interactables").AddChild(interactableObject);
+		GetNode<Node>(nodePath).AddChild(interactableObject);
 	}
 }

@@ -1,3 +1,4 @@
+using System;
 using System.Diagnostics.CodeAnalysis;
 using Godot;
 
@@ -21,6 +22,10 @@ public partial class InteractableObject : Node3D
 	[Export]
 	public AudioStream objectInteractedSound;
 	[Export]
+	public bool playerInteractedSoundOnce;
+	[Export]
+	public bool hasPlayed;
+	[Export]
 	public AudioStream objectUsedSound;
 
 	[ExportGroup("Item Settings")]
@@ -38,6 +43,7 @@ public partial class InteractableObject : Node3D
 	public enum InteractableObjectType
 	{
 		None,
+		Test,
 		Random,
 		RandomTableItem,
 
@@ -76,13 +82,18 @@ public partial class InteractableObject : Node3D
 	{
 		if (condition)
 		{
-			AudioStreamPlayer audioStreamPlayer = new AudioStreamPlayer();
-			audioStreamPlayer.Stream = sound;
-			AddChild(audioStreamPlayer);
-			audioStreamPlayer.Play();
-			audioStreamPlayer.Finished += () => {
-				audioStreamPlayer.QueueFree();
-			};
+			if (playerInteractedSoundOnce && hasPlayed) return;
+
+			if ((bool)(playerInteractedSoundOnce && !hasPlayed) || !playerInteractedSoundOnce)
+			{
+				AudioStreamPlayer audioStreamPlayer = new AudioStreamPlayer();
+				audioStreamPlayer.Stream = sound;
+				AddChild(audioStreamPlayer);
+				audioStreamPlayer.Play();
+				audioStreamPlayer.Finished += () => {
+					audioStreamPlayer.QueueFree();
+				};
+			}
 		}
 	}
 
@@ -101,9 +112,9 @@ public partial class InteractableObject : Node3D
 			holdingScale.Y,
 			holdingScale.Z
 		);
-		
-		// Audio
-		PlaySound(objectInteractedSound != null, objectInteractedSound);
+
+        // Audio
+        PlaySound(objectInteractedSound != null, objectInteractedSound);
 	}
 
 	public void OnItemUsed(InteractableObject.InteractableObjectType type)

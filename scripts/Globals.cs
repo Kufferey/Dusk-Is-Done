@@ -5,7 +5,11 @@ using GodotCollections = Godot.Collections;
 public partial class Globals : Node
 {
     // Game
-    public static string gameVersion = "0.0.0";
+    public static byte gameVersionMajor = 1;
+    public static byte gameVersionMinor = 0;
+    public static byte gameVersionPatch = 0;
+
+    public static string gameVersion = gameVersionMajor.ToString() + "." + gameVersionMinor.ToString() + "." + gameVersionPatch.ToString();
 
     public static string gameDaySavePath = "user://save_slots";
 

@@ -13,7 +13,9 @@ public partial class Player : Node3D
 	public static InteractableObject playerCurrentHoveredObject;
 	public static InteractableObject playerCurrentHeldItem;
 
-	public static int playerHealth = 100;
+	public static float playerMinHealth = 0.0F;
+	public static float playerMaxHealth = 100.0F;
+	public static float playerHealth = playerMaxHealth;
 	public static int playerScore;
 
 	[Export]
@@ -36,6 +38,7 @@ public partial class Player : Node3D
 		if (playerCanMoveCamera)
 		{
 			Input.SetMouseMode(Input.MouseModeEnum.Captured);
+			// DisplayServer.WindowSetMode(DisplayServer.WindowMode.Fullscreen);
 		}
 	}
 
@@ -83,7 +86,7 @@ public partial class Player : Node3D
 
 	public static bool IsPlayerDead()
 	{
-		if (playerHealth > 0) return false;
+		if (playerHealth > playerMinHealth) return false;
 		return true;
 	}
 
@@ -117,12 +120,20 @@ public partial class Player : Node3D
 
 	public void UiToggle() => playerUi.Visible = !playerUi.Visible;
 	
-
 	public void SetHoveredToHeld()
 	{
 		playerCurrentHeldItem = playerCurrentHoveredObject;
 		playerCurrentHeldItem.isHolding = true;
 		playerCanHoldItem = false;
+	}
+
+	public void RemoveCurrentHeldItem()
+	{
+		playerCurrentHeldItem.QueueFree();
+		playerCurrentHeldItem = null;
+
+		playerCanHoldItem = true;
+		playerCanInteract = true;
 	}
 
 	public void ZoomCamera(float from, float to, Tween.EaseType easeType, bool useSens, float duration = 0.3F)

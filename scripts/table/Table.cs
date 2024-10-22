@@ -8,8 +8,8 @@ public partial class Table : Node3D
 	[Signal]
 	public delegate void TableItemRemovedEventHandler(int atPos, InteractableObject interactableObject);
 	
-	public static Godot.Collections.Array<InteractableObject> tableItemsRow = new Godot.Collections.Array<InteractableObject>{};
-	public static Godot.Collections.Array<InteractableObject> tableItemsCollumn = new Godot.Collections.Array<InteractableObject>{};
+	public Godot.Collections.Array<InteractableObject> tableItemsRow = new Godot.Collections.Array<InteractableObject>{};
+	public Godot.Collections.Array<InteractableObject> tableItemsCollumn = new Godot.Collections.Array<InteractableObject>{};
 	
 	public int tableItemsAllowedRow = 6;
 	public int tableItemsAllowedCollumn = 3;

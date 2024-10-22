@@ -28,7 +28,6 @@ public partial class GameUi : CanvasLayer
 	[Export]
 	public TextureProgressBar healthBar {get; set;}
 
-	public float healthBarTransparency = 1F;
 	private Color healthBarDefaultColor; // HEX: 57ff60
 
 	// Called when the node enters the scene tree for the first time.
@@ -40,9 +39,12 @@ public partial class GameUi : CanvasLayer
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
 	public override void _Process(double delta)
 	{
-		healthBarDefaultColor = new Color(0.341F, 1F, 0.376F, (float)((healthBar.Value - healthBar.MinValue) / (healthBar.MaxValue - healthBar.MinValue)));
-		healthBar.TintProgress = healthBarDefaultColor;
-		healthBar.Value = Player.playerHealth;
+		if (healthBar.Value != Player.playerHealth)
+		{
+			healthBarDefaultColor = new Color(0.341F, 1F, 0.376F, (float)((healthBar.Value - healthBar.MinValue) / (healthBar.MaxValue - healthBar.MinValue)));
+			healthBar.TintProgress = healthBarDefaultColor;
+			healthBar.Value = Mathf.Lerp(healthBar.Value, Player.playerHealth, 0.1F);
+		}
 	}
 
 	public void ChangeUi(InteractionIconsEnum interactionIcon, string text)

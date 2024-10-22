@@ -9,7 +9,7 @@ public partial class Day : Resource
 	public string customEvents;
 
 	[Export]
-	public string saveGameVersion = Globals.gameVersion;
+	public byte[] saveGameVersion = new byte[] {Globals.gameVersionMajor, Globals.gameVersionMinor, Globals.gameVersionPatch};
 
 	[Export]
 	public int day;

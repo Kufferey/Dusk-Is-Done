@@ -33,7 +33,20 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -17.0328, 0, 0)
 [node name="Table" parent="Interactables" instance=ExtResource("3_duk5y")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.15839, 0, -1.55396)
 
-[node name="Cherries" type="Node" parent="Interactables"]
+[node name="Cherry" type="Node" parent="Interactables"]
+
+[node name="SpawnPoints" type="Node" parent="Interactables/Cherry"]
+
+[node name="Node3D" type="Node3D" parent="Interactables/Cherry/SpawnPoints"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.07247, 0, 2.14148)
+
+[node name="Node3D2" type="Node3D" parent="Interactables/Cherry/SpawnPoints"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.67122, -1.22569, -1.26255)
+
+[node name="Node3D3" type="Node3D" parent="Interactables/Cherry/SpawnPoints"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.06185, 0.625613, -1.26255)
+
+[node name="Cherries" type="Node" parent="Interactables/Cherry"]
 
 [node name="Environment" type="Node" parent="."]
 
