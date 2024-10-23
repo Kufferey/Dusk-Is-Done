@@ -6,39 +6,24 @@ using Godot;
 [GlobalClass]
 public partial class InteractableObject : Node3D
 {
-	[Signal]
-	public delegate void ItemHoveredEventHandler(InteractableObject.InteractableObjectType type);
-	[Signal]
-	public delegate void ItemInteractedEventHandler(InteractableObject.InteractableObjectType type);
-	[Signal]
-	public delegate void ItemUsedEventHandler(InteractableObject.InteractableObjectType type);
+	[Signal] public delegate void ItemHoveredEventHandler(InteractableObject.InteractableObjectType type);
+	[Signal] public delegate void ItemInteractedEventHandler(InteractableObject.InteractableObjectType type);
+	[Signal] public delegate void ItemUsedEventHandler(InteractableObject.InteractableObjectType type);
 
-	[Export]
-	public string objectName;
-	[Export(PropertyHint.MultilineText)]
-	public string objectDesc;
-	[Export(PropertyHint.Enum)]
-	public InteractableObjectType objectType;
-	[Export]
-	public AudioStream objectInteractedSound;
-	[Export]
-	public bool playerInteractedSoundOnce;
-	[Export]
-	public bool hasPlayed;
-	[Export]
-	public AudioStream objectUsedSound;
+	[Export] public string objectName;
+	[Export(PropertyHint.MultilineText)] public string objectDesc;
+	[Export(PropertyHint.Enum)] public InteractableObjectType objectType;
+	[Export] public AudioStream objectInteractedSound;
+	[Export] public bool playerInteractedSoundOnce;
+	[Export] public bool hasPlayed;
+	[Export] public AudioStream objectUsedSound;
 
 	[ExportGroup("Item Settings")]
-	[Export]
-	public bool isInteractable {get; set;} = true;
-	[Export]
-	public bool isHolding {get; set;} = false;
-	[Export]
-	public Godot.Vector3 interactionBoxScale {get; set;} = new Godot.Vector3(3, 3, 3);
-	[Export]
-	public Godot.Vector3 holdingScale {get; set;} = new Vector3(2, 2, 2);
-	[Export]
-	public Godot.Vector3 holdingOffset {get; set;}
+	[Export] public bool isInteractable {get; set;} = true;
+	[Export] public bool isHolding {get; set;} = false;
+	[Export] public Godot.Vector3 interactionBoxScale {get; set;} = new Godot.Vector3(3, 3, 3);
+	[Export] public Godot.Vector3 holdingScale {get; set;} = new Vector3(2, 2, 2);
+	[Export] public Godot.Vector3 holdingOffset {get; set;}
 
 	public enum InteractableObjectType
 	{

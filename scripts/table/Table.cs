@@ -3,10 +3,8 @@ using System;
 
 public partial class Table : Node3D
 {
-	[Signal]
-	public delegate void TableItemAddedEventHandler(int atPos, InteractableObject interactableObject);
-	[Signal]
-	public delegate void TableItemRemovedEventHandler(int atPos, InteractableObject interactableObject);
+	[Signal] public delegate void TableItemAddedEventHandler(int atPos, InteractableObject interactableObject);
+	[Signal] public delegate void TableItemRemovedEventHandler(int atPos, InteractableObject interactableObject);
 	
 	public Godot.Collections.Array<InteractableObject> tableItemsRow = new Godot.Collections.Array<InteractableObject>{};
 	public Godot.Collections.Array<InteractableObject> tableItemsCollumn = new Godot.Collections.Array<InteractableObject>{};

@@ -18,20 +18,14 @@ public partial class Player : Node3D
 	public static float playerHealth = playerMaxHealth;
 	public static int playerScore;
 
-	[Export]
-	public float playerItemSway = 7F;
+	[Export] public float playerItemSway = 7F;
 
-	[Export]
-	public Node3D playerCameraNode {get; set;}
-	[Export]
-	public Camera3D playerCamera {get; set;}
-	[Export]
-	public RayCast3D playerRaycast {get; set;}
-	[Export]
-	public Node3D playerHand {get; set;}
+	[Export] public Node3D playerCameraNode {get; set;}
+	[Export] public Camera3D playerCamera {get; set;}
+	[Export] public RayCast3D playerRaycast {get; set;}
+	[Export] public Node3D playerHand {get; set;}
 
-	[Export]
-	public GameUi playerUi {get; set;}
+	[Export] public GameUi playerUi {get; set;}
 
 	public override void _Ready()
 	{

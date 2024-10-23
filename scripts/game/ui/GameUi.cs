@@ -17,16 +17,12 @@ public partial class GameUi : CanvasLayer
 	public static InteractionIconsEnum interactionIcon = InteractionIconsEnum.None;
 
 
-	[Export]
-	public Control interactionUiContainer {get; set;}
+	[Export] public Control interactionUiContainer {get; set;}
 
-	[Export]
-	public Label textBox {get; set;}
-	[Export]
-	public TextureRect iconBox {get; set;}
+	[Export] public Label textBox {get; set;}
+	[Export] public TextureRect iconBox {get; set;}
 
-	[Export]
-	public TextureProgressBar healthBar {get; set;}
+	[Export] public TextureProgressBar healthBar {get; set;}
 
 	private Color healthBarDefaultColor; // HEX: 57ff60
 

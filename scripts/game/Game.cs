@@ -4,20 +4,15 @@ using Godot;
 
 public partial class Game : Node3D
 {
-	[Signal]
-	public delegate void NewDayEventHandler();
-	[Signal]
-	public delegate void EndDayEventHandler();
+	[Signal] public delegate void NewDayEventHandler();
+	[Signal] public delegate void EndDayEventHandler();
 
 	public static Difficulty.DifficultyTypes? difficulty {get; set;}
 	public static int currentDay {get; set;}
 	public static int currentSection {get; set;}
 
-	[Export]
-	private Player player {get; set;}
-
-	[Export]
-	private Table table {get; set;}
+	[Export] private Player player {get; set;}
+	[Export] private Table table {get; set;}
 
 	private int maxCherries = 6;
 	private int currentCherries;

@@ -26,6 +26,18 @@ public partial class Radio : Node3D
 		{"Glitch1", (AudioStream)ResourceLoader.Load("res://assets/music/electroc/Distance.ogg")},
 	};
 
+	[Export] public AudioStreamPlayer3D audioStreamPlayer3D;
+	[Export] public int bpm = 120;
+	[Export] public float randomGlitchChance = 100;
+	[Export] public float glitchTime = 0.2F;
+	[Export] public bool canRepeat;
+	[Export] public bool canPlay = true;
+	[Export] public bool isInGlitch = false;
+	[Export] public bool canGlitch = true;
+	[Export] public float glitchWaitTime = 5;
+
+	[Export] public Timer glitchTimer = new Timer();
+	[Export] public AnimationPlayer animationPlayer;
 
 	public string lastSongName;
 	public string currentSongName;
@@ -34,30 +46,6 @@ public partial class Radio : Node3D
 	private float timer;
 
 	private int maxSongs;
-
-	[Export]
-	public AudioStreamPlayer3D audioStreamPlayer3D;
-	[Export]
-	public int bpm = 120;
-	[Export]
-	public float randomGlitchChance = 100;
-	[Export]
-	public float glitchTime = 0.2F;
-	[Export]
-	public bool canRepeat;
-	[Export]
-	public bool canPlay = true;
-	[Export]
-	public bool isInGlitch = false;
-	[Export]
-	public bool canGlitch = true;
-	[Export]
-	public float glitchWaitTime = 5;
-
-	[Export]
-	public Timer glitchTimer = new Timer();
-	[Export]
-	public AnimationPlayer animationPlayer;
 
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
