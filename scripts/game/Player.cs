@@ -20,12 +20,12 @@ public partial class Player : Node3D
 
 	[Export] public float playerItemSway = 7F;
 
-	[Export] public Node3D playerCameraNode {get; set;}
-	[Export] public Camera3D playerCamera {get; set;}
-	[Export] public RayCast3D playerRaycast {get; set;}
-	[Export] public Node3D playerHand {get; set;}
+	[Export] public Node3D PlayerCameraNode {get; set;}
+	[Export] public Camera3D PlayerCamera {get; set;}
+	[Export] public RayCast3D PlayerRaycast {get; set;}
+	[Export] public Node3D PlayerHand {get; set;}
 
-	[Export] public GameUi playerUi {get; set;}
+	[Export] public GameUi PlayerUi {get; set;}
 
 	public override void _Ready()
 	{
@@ -47,9 +47,10 @@ public partial class Player : Node3D
 				Mathf.Lerp(playerCurrentHeldItem.Scale.Y, playerCurrentHeldItem.holdingScale.Y, playerItemSway * (float)delta),
 				Mathf.Lerp(playerCurrentHeldItem.Scale.Z, playerCurrentHeldItem.holdingScale.Z, playerItemSway * (float)delta)
 			);
-			playerCurrentHeldItem.Rotation = playerHand.GlobalRotation;
 
-			Vector3 newOffset = playerHand.GlobalPosition + playerCurrentHeldItem.holdingOffset;
+			playerCurrentHeldItem.Rotation = PlayerHand.GlobalRotation;
+			Vector3 newOffset = PlayerHand.GlobalPosition;
+
 			playerCurrentHeldItem.Position = new Vector3(
 				Mathf.Lerp(playerCurrentHeldItem.Position.X, newOffset.X, playerItemSway * (float)delta),
 				Mathf.Lerp(playerCurrentHeldItem.Position.Y, newOffset.Y, playerItemSway * (float)delta),
@@ -63,15 +64,15 @@ public partial class Player : Node3D
 		if (@event is InputEventMouseMotion mouseMovement && playerCanMoveCamera)
 		{
 			RotateY(-Mathf.DegToRad(mouseMovement.Relative.X * playerCameraTurnSpeed));
-			playerCameraNode.RotateX(-Mathf.DegToRad(mouseMovement.Relative.Y * playerCameraTurnSpeed));
-			playerCameraNode.Rotation = new Vector3(
-				Math.Clamp(playerCameraNode.Rotation.X, Mathf.DegToRad(-85F), Mathf.DegToRad(85F)),
-				playerCameraNode.Rotation.Y,
-				playerCameraNode.Rotation.Z
+			PlayerCameraNode.RotateX(-Mathf.DegToRad(mouseMovement.Relative.Y * playerCameraTurnSpeed));
+			PlayerCameraNode.Rotation = new Vector3(
+				Math.Clamp(PlayerCameraNode.Rotation.X, Mathf.DegToRad(-85F), Mathf.DegToRad(85F)),
+				PlayerCameraNode.Rotation.Y,
+				PlayerCameraNode.Rotation.Z
 			);
 		}
 
-		if (@event is InputEventKey && @event.IsActionPressed("interact") && playerCanHoldItem && playerCurrentHoveredObject.isInteractable && !IsPlayerHoldingItem())
+		if (@event is InputEventKey && @event.IsActionPressed("interact") && playerCanHoldItem && playerCurrentHoveredObject.IsInteractable && !IsPlayerHoldingItem())
 		{
 			SetHoveredToHeld();
 			playerCurrentHeldItem.EmitSignal(InteractableObject.SignalName.ItemInteracted, (InteractableObject)playerCurrentHeldItem);
@@ -86,7 +87,7 @@ public partial class Player : Node3D
 
 	public static bool IsPlayerHoldingItemType(InteractableObject.InteractableObjectType type)
 	{
-		if (IsPlayerHoldingItem() && (InteractableObject.InteractableObjectType)playerCurrentHeldItem.objectType == type) return true;
+		if (IsPlayerHoldingItem() && (InteractableObject.InteractableObjectType)playerCurrentHeldItem.ObjectType == type) return true;
 		return false;
 	}
 
@@ -98,13 +99,13 @@ public partial class Player : Node3D
 
 	public InteractableObject GetHoveredItem()
 	{
-		if (!playerCanHoldItem || !playerCanInteract || playerCurrentHeldItem != null || !playerRaycast.IsColliding()) {playerUi?.ChangeUi(GameUi.InteractionIconsEnum.None, ""); return null;}
+		if (!playerCanHoldItem || !playerCanInteract || playerCurrentHeldItem != null || !PlayerRaycast.IsColliding()) {PlayerUi?.ChangeUi(GameUi.InteractionIconsEnum.None, ""); return null;}
 		
-		GodotObject hoveredObject = playerRaycast.GetCollider();
+		GodotObject hoveredObject = PlayerRaycast.GetCollider();
 		if (hoveredObject is Node3D item) if (item?.GetParent() is InteractableObject interactableItem)
 		{
-			interactableItem.EmitSignal(InteractableObject.SignalName.ItemHovered, (int)interactableItem.objectType);
-			playerUi?.ChangeUi(GameUi.InteractionIconsEnum.Normal, "Press [E] to Pickup: " + interactableItem.objectName?.ToString());
+			interactableItem.EmitSignal(InteractableObject.SignalName.ItemHovered, (int)interactableItem.ObjectType);
+			PlayerUi?.ChangeUi(GameUi.InteractionIconsEnum.Normal, "Press [E] to Pickup: " + interactableItem.ObjectName?.ToString());
 
 			return interactableItem;
 		}
@@ -112,12 +113,12 @@ public partial class Player : Node3D
 		return null;
 	}
 
-	public void UiToggle() => playerUi.Visible = !playerUi.Visible;
+	public void UiToggle() => PlayerUi.Visible = !PlayerUi.Visible;
 	
 	public void SetHoveredToHeld()
 	{
 		playerCurrentHeldItem = playerCurrentHoveredObject;
-		playerCurrentHeldItem.isHolding = true;
+		playerCurrentHeldItem.IsHolding = true;
 		playerCanHoldItem = false;
 	}
 
@@ -134,7 +135,7 @@ public partial class Player : Node3D
 	{
 		Tween tween = GetTree().CreateTween();
 		tween.SetEase(easeType);
-		tween.TweenProperty(playerCamera, "fov", to, duration);
+		tween.TweenProperty(PlayerCamera, "fov", to, duration);
 		if (useSens)
 		{
 			playerCameraTurnSpeed = Mathf.Abs(Mathf.Lerp(playerCameraTurnSpeed, Mathf.Abs(
@@ -151,10 +152,9 @@ public partial class Player : Node3D
 		{
 			playerCanMoveCamera = false;
 			
-			playerCameraNode.LookAt(position);
+			PlayerCameraNode.LookAt(position);
 		}
 	}
 
-	public float GetCameraZoom() {return (float)playerCamera.Fov;}
-	
+	public float GetCameraZoom() {return (float)PlayerCamera.Fov;}
 }

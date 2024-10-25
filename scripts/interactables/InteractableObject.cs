@@ -1,5 +1,4 @@
 using System;
-using System.Diagnostics.CodeAnalysis;
 using Godot;
 
 [Tool]
@@ -10,20 +9,20 @@ public partial class InteractableObject : Node3D
 	[Signal] public delegate void ItemInteractedEventHandler(InteractableObject.InteractableObjectType type);
 	[Signal] public delegate void ItemUsedEventHandler(InteractableObject.InteractableObjectType type);
 
-	[Export] public string objectName;
-	[Export(PropertyHint.MultilineText)] public string objectDesc;
-	[Export(PropertyHint.Enum)] public InteractableObjectType objectType;
+	[Export] public string ObjectName {get; set;}
+	[Export(PropertyHint.MultilineText)] public string ObjectDesc {get; set;}
+	[Export(PropertyHint.Enum)] public InteractableObjectType ObjectType {get; set;}
 	[Export] public AudioStream objectInteractedSound;
 	[Export] public bool playerInteractedSoundOnce;
-	[Export] public bool hasPlayed;
+	[Export] public bool hasPlayedInteractedSound;
 	[Export] public AudioStream objectUsedSound;
 
 	[ExportGroup("Item Settings")]
-	[Export] public bool isInteractable {get; set;} = true;
-	[Export] public bool isHolding {get; set;} = false;
-	[Export] public Godot.Vector3 interactionBoxScale {get; set;} = new Godot.Vector3(3, 3, 3);
-	[Export] public Godot.Vector3 holdingScale {get; set;} = new Vector3(2, 2, 2);
-	[Export] public Godot.Vector3 holdingOffset {get; set;}
+	[Export] public bool IsInteractable {get; set;} = true;
+	[Export] public bool IsHolding {get; set;} = false;
+	[Export] public Godot.Vector3 interactionBoxScale = new Godot.Vector3(1.5F, 1.5F, 1.5F);
+	[Export] public Godot.Vector3 holdingScale = new Vector3(1.5F, 1.5F, 1.5F);
+	[Export] public Godot.Vector3 holdingOffset;
 
 	public enum InteractableObjectType
 	{
@@ -67,9 +66,9 @@ public partial class InteractableObject : Node3D
 	{
 		if (condition)
 		{
-			if (playerInteractedSoundOnce && hasPlayed) return;
+			if (playerInteractedSoundOnce && hasPlayedInteractedSound) return;
 
-			if ((bool)(playerInteractedSoundOnce && !hasPlayed) || !playerInteractedSoundOnce)
+			if ((bool)(playerInteractedSoundOnce && !hasPlayedInteractedSound) || !playerInteractedSoundOnce)
 			{
 				AudioStreamPlayer audioStreamPlayer = new AudioStreamPlayer();
 				audioStreamPlayer.Stream = sound;
@@ -89,7 +88,7 @@ public partial class InteractableObject : Node3D
 
 	public void OnItemInteracted(InteractableObject.InteractableObjectType type)
 	{
-		isHolding = true;
+		IsHolding = true;
 
 		// Scalling
 		Scale = new Vector3(

@@ -4,12 +4,12 @@
 [ext_resource type="Texture2D" uid="uid://mf3rq05euw63" path="res://assets/images/healthbar/healthbar-progress.png" id="2_ii6qc"]
 [ext_resource type="Texture2D" uid="uid://dyeqsw3mv2bs" path="res://assets/images/healthbar/healthbar-border.png" id="3_wp3cq"]
 
-[node name="GameUi" type="CanvasLayer" node_paths=PackedStringArray("interactionUiContainer", "textBox", "iconBox", "healthBar")]
+[node name="GameUi" type="CanvasLayer" node_paths=PackedStringArray("InteractionUiContainer", "TextBox", "IconBox", "HealthBar")]
 script = ExtResource("1_1sdx8")
-interactionUiContainer = NodePath("Main/InteractionContainer")
-textBox = NodePath("Main/InteractionContainer/Text")
-iconBox = NodePath("Main/InteractionContainer/Icon")
-healthBar = NodePath("Main/HealthBar/Progress")
+InteractionUiContainer = NodePath("Main/InteractionContainer")
+TextBox = NodePath("Main/InteractionContainer/Text")
+IconBox = NodePath("Main/InteractionContainer/Icon")
+HealthBar = NodePath("Main/HealthBar/Progress")
 
 [node name="Main" type="Control" parent="."]
 layout_mode = 3

@@ -3,6 +3,9 @@
 [ext_resource type="PackedScene" uid="uid://ibp5swfilbpv" path="res://scenes/interactables/interactable_object.tscn" id="1_j7yvy"]
 
 [node name="Cherry" instance=ExtResource("1_j7yvy")]
-objectName = "Cherry"
-objectDesc = "A basic company resource."
-objectType = 3
+ObjectName = "Cherry"
+ObjectDesc = "A Basic Resource."
+interactionBoxScale = Vector3(1, 1, 1)
+
+[node name="CollisionShape3D" parent="Area3D" index="0"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)

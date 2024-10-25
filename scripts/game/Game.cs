@@ -1,6 +1,6 @@
-using System;
 using static Godot.GD;
 using Godot;
+
 
 public partial class Game : Node3D
 {
@@ -11,11 +11,11 @@ public partial class Game : Node3D
 	public static int currentDay {get; set;}
 	public static int currentSection {get; set;}
 
-	[Export] private Player player {get; set;}
-	[Export] private Table table {get; set;}
+	[Export] private Player Player {get; set;}
+	[Export] private Table Table {get; set;}
 
-	private int maxCherries = 6;
-	private int currentCherries;
+	private byte maxCherries = 6;
+	private byte currentCherries;
 
 	public override void _Ready()
 	{
@@ -79,16 +79,19 @@ public partial class Game : Node3D
 		currentCherries = 0;
 		for (int cherries = 0; cherries < amount; cherries++)
 		{
-			AddInteractableObject(InteractableObject.InteractableObjectType.Cherry, GetRandomSpawnPoint(), new Vector3(0,0,0), "Interactables/Cherry/Cherries");
+			byte randomChance = (byte)RandRange(1, 5);
+			if (randomChance < 1) AddInteractableObject(InteractableObject.InteractableObjectType.CherrySpoiled, GetRandomSpawnPoint(), new Vector3(0,0,0), "Interactables/Cherry/Cherries");
+			else AddInteractableObject(InteractableObject.InteractableObjectType.Cherry, GetRandomSpawnPoint(), new Vector3(0,0,0), "Interactables/Cherry/Cherries");
+
 			currentCherries++;
 		}
 	}
 
     public void PlayerZoomCamera(float from, float to, Tween.EaseType easeType, bool useCameraSens, float duration = 0.3F)
 	{
-		if (player.HasMethod("ZoomCamera"))
+		if (Player.HasMethod("ZoomCamera"))
 		{
-			player.Callv(Player.MethodName.ZoomCamera, new Godot.Collections.Array{
+			Player.Callv(Player.MethodName.ZoomCamera, new Godot.Collections.Array{
 				from, to, (int)easeType, useCameraSens, duration
 			});	
 		}
@@ -96,9 +99,9 @@ public partial class Game : Node3D
 
 	public void PlayerZoomAndLockCamera(float from, float to, Vector3 position, Tween.EaseType easeType, bool useSens, bool lockCam, float duration = 0.3F)
 	{
-		if (player.HasMethod("ZoomAndLockCamera"))
+		if (Player.HasMethod("ZoomAndLockCamera"))
 		{
-			player.Callv(Player.MethodName.ZoomAndLockCamera, new Godot.Collections.Array{
+			Player.Callv(Player.MethodName.ZoomAndLockCamera, new Godot.Collections.Array{
 				from, to, position, (int)easeType, useSens, lockCam, duration
 			});	
 		}
@@ -133,7 +136,16 @@ public partial class Game : Node3D
 
 	public void OnItemUsed(InteractableObject.InteractableObjectType type)
 	{
+		switch (type)
+		{
+			case InteractableObject.InteractableObjectType.Cherry:
 
+
+
+			break;
+			
+			default: break;
+		}
 	}
 
 	public void AddInteractableObject(InteractableObject.InteractableObjectType type, Vector3 position = default, Vector3 rotation = default, string nodePath = "Interactables")

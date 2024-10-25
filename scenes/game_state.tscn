@@ -20,10 +20,10 @@ tonemap_mode = 2
 glow_enabled = true
 volumetric_fog_density = 0.0
 
-[node name="Game" type="Node3D" node_paths=PackedStringArray("player", "table")]
+[node name="Game" type="Node3D" node_paths=PackedStringArray("Player", "Table")]
 script = ExtResource("1_17okt")
-player = NodePath("Player/Player")
-table = NodePath("Interactables/Table")
+Player = NodePath("Player/Player")
+Table = NodePath("Interactables/Table")
 
 [node name="Interactables" type="Node" parent="."]
 
@@ -61,13 +61,13 @@ shadow_enabled = true
 
 [node name="Player" type="Node" parent="."]
 
-[node name="Player" type="Node3D" parent="Player" node_paths=PackedStringArray("playerCameraNode", "playerCamera", "playerRaycast", "playerHand", "playerUi")]
+[node name="Player" type="Node3D" parent="Player" node_paths=PackedStringArray("PlayerCameraNode", "PlayerCamera", "PlayerRaycast", "PlayerHand", "PlayerUi")]
 script = ExtResource("2_jxq7i")
-playerCameraNode = NodePath("CameraNeck")
-playerCamera = NodePath("CameraNeck/Camera3D")
-playerRaycast = NodePath("CameraNeck/RayCast3D")
-playerHand = NodePath("CameraNeck/Hand")
-playerUi = NodePath("GameUi")
+PlayerCameraNode = NodePath("CameraNeck")
+PlayerCamera = NodePath("CameraNeck/Camera3D")
+PlayerRaycast = NodePath("CameraNeck/RayCast3D")
+PlayerHand = NodePath("CameraNeck/Hand")
+PlayerUi = NodePath("GameUi")
 
 [node name="GameUi" parent="Player/Player" instance=ExtResource("6_mdlwj")]
 

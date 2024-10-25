@@ -9,8 +9,8 @@ public partial class InteractableObjectManager : Node
 	{
 		{InteractableObject.InteractableObjectType.Test,          (Godot.PackedScene)ResourceLoader.Load<PackedScene>("res://scenes/interactables/table_items/test.tscn")},
 
-		{InteractableObject.InteractableObjectType.Cherry,        (Godot.PackedScene)ResourceLoader.Load<PackedScene>("res://scenes/interactables/table_items/test.tscn")},
-		{InteractableObject.InteractableObjectType.CherrySpoiled, (Godot.PackedScene)ResourceLoader.Load<PackedScene>("res://scenes/interactables/table_items/test.tscn")},
+		{InteractableObject.InteractableObjectType.Cherry,        (Godot.PackedScene)ResourceLoader.Load<PackedScene>("res://scenes/interactables/cherry/cherry.tscn")},
+		{InteractableObject.InteractableObjectType.CherrySpoiled, (Godot.PackedScene)ResourceLoader.Load<PackedScene>("res://scenes/interactables/cherry/cherry_spoiled.tscn")},
 		
 		{InteractableObject.InteractableObjectType.Pills,         (Godot.PackedScene)ResourceLoader.Load<PackedScene>("res://scenes/interactables/table_items/test.tscn")},
 		{InteractableObject.InteractableObjectType.Bandage,       (Godot.PackedScene)ResourceLoader.Load<PackedScene>("res://scenes/interactables/table_items/test.tscn")},
