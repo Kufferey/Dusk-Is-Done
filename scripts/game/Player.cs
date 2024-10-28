@@ -79,6 +79,12 @@ public partial class Player : Node3D
 		}
     }
 
+	public void PlayerKill()
+	{
+		RemoveCurrentHeldItem();
+		playerHealth = playerMinHealth;
+	}
+
 	public static bool IsPlayerDead()
 	{
 		if (playerHealth > playerMinHealth) return false;
@@ -124,14 +130,15 @@ public partial class Player : Node3D
 
 	public void RemoveCurrentHeldItem()
 	{
-		playerCurrentHeldItem.QueueFree();
+		if (playerCurrentHeldItem != null) playerCurrentHeldItem.QueueFree();
 		playerCurrentHeldItem = null;
 
 		playerCanHoldItem = true;
 		playerCanInteract = true;
 	}
 
-	public void ZoomCamera(float from, float to, Tween.EaseType easeType, bool useSens, float duration = 0.3F)
+	public void ZoomCamera(float from, float to, Tween.EaseType easeType,
+	bool useSens, float duration = 0.3F)
 	{
 		Tween tween = GetTree().CreateTween();
 		tween.SetEase(easeType);
@@ -145,7 +152,8 @@ public partial class Player : Node3D
 		}
 	}
 
-	public void ZoomAndLockCamera(float from, float to, Vector3 position, Tween.EaseType easeType, bool useSens, bool lockCam, float duration = 0.3F)
+	public void ZoomAndLockCamera(float from, float to, Vector3 position,
+	Tween.EaseType easeType, bool useSens, bool lockCam, float duration = 0.3F)
 	{
 		ZoomCamera(from, to, easeType, useSens, duration);
 		if (lockCam)

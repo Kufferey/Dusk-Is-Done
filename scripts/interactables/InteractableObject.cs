@@ -12,6 +12,8 @@ public partial class InteractableObject : Node3D
 	[Export] public string ObjectName {get; set;}
 	[Export(PropertyHint.MultilineText)] public string ObjectDesc {get; set;}
 	[Export(PropertyHint.Enum)] public InteractableObjectType ObjectType {get; set;}
+
+	[ExportGroup("Item Audio")]
 	[Export] public AudioStream objectInteractedSound;
 	[Export] public bool playerInteractedSoundOnce;
 	[Export] public bool hasPlayedInteractedSound;
@@ -22,7 +24,6 @@ public partial class InteractableObject : Node3D
 	[Export] public bool IsHolding {get; set;} = false;
 	[Export] public Godot.Vector3 interactionBoxScale = new Godot.Vector3(1.5F, 1.5F, 1.5F);
 	[Export] public Godot.Vector3 holdingScale = new Vector3(1.5F, 1.5F, 1.5F);
-	[Export] public Godot.Vector3 holdingOffset;
 
 	public enum InteractableObjectType
 	{
@@ -42,11 +43,11 @@ public partial class InteractableObject : Node3D
 		Notebook,
 	}
 
-	private CollisionShape3D interactionBox;
+	private CollisionShape3D _interactionBox;
 
     public override void _Ready()
     {
-		if (interactionBox == null) interactionBox = GetNode<CollisionShape3D>("Area3D/CollisionShape3D");
+		if (_interactionBox == null) _interactionBox = GetNode<CollisionShape3D>("Area3D/CollisionShape3D");
 
 		ItemHovered += OnItemHovered;
 		ItemInteracted += OnItemInteracted;
@@ -57,12 +58,12 @@ public partial class InteractableObject : Node3D
 	{
 		if (Engine.IsEditorHint())
 		{
-			if (interactionBox == null) interactionBox = GetNode<CollisionShape3D>("Area3D/CollisionShape3D");
-			interactionBox.Scale = interactionBoxScale;
+			if (_interactionBox == null) _interactionBox = GetNode<CollisionShape3D>("Area3D/CollisionShape3D");
+			_interactionBox.Scale = interactionBoxScale;
 		}
 	}
 
-	public void PlaySound(bool condition, AudioStream sound)
+	private void PlaySound(bool condition, AudioStream sound)
 	{
 		if (condition)
 		{
@@ -104,41 +105,5 @@ public partial class InteractableObject : Node3D
 	public void OnItemUsed(InteractableObject.InteractableObjectType type)
 	{
 		PlaySound(objectUsedSound != null, objectUsedSound);
-		
-		switch (type)
-		{
-			case InteractableObjectType.Pills:
-
-			// Code for Pills
-
-			break;
-
-			case InteractableObjectType.Bandage:
-
-			// Code for Bandage
-
-			break;
-
-			case InteractableObjectType.MedicalPills:
-
-			// Code for MedicalPills
-
-			break;
-
-			case InteractableObjectType.MedicalKit:
-
-			// Code for MedicalKit
-
-			break;
-
-			case InteractableObjectType.Notebook:
-			
-			// Code for Notebook
-
-			break;
-
-			default:
-			break;
-		}
 	}
 }
