@@ -1,25 +1,40 @@
 using static Godot.GD;
 using Godot;
-using System;
 
 public partial class Game : Node3D
 {
 	[Signal] public delegate void NewDayEventHandler();
 	[Signal] public delegate void EndDayEventHandler();
 
-	public static Difficulty.DifficultyTypes? Difficulty {get; set;}
+	public static Day DaySave {get; set;}
+
+	public static Difficulty.DifficultyTypes? CurrentDifficulty {get; set;}
 	public static int CurrentDay {get; set;}
+	public static int CurrentScore {get; set;}
+	public static Seasons.SeasonType? CurrentSeason {get; set;}
 	public static int CurrentSection {get; set;}
 
-	[Export] private Player Player {get; set;}
-	[Export] private Table Table {get; set;}
+	[Export] private Player _Player {get; set;}
+	[Export] private Table _Table {get; set;}
 
 	private byte _maxCherries = 6;
 	private byte _currentCherries;
 
 	public override void _Ready()
 	{
-		EnterGame();
+		if (!IsOnLoadedSave())
+		{
+			DaySave = new Day();
+
+			if (CurrentDifficulty == null || !CurrentDifficulty.HasValue) CurrentDifficulty = Difficulty.DifficultyTypes.Normal;
+			if (CurrentSeason == null || !CurrentSeason.HasValue) CurrentSeason = Seasons.SeasonType.Spring;
+
+			SaveGame();
+		}
+		else
+		{
+			
+		}
 	}
 
 
@@ -28,14 +43,15 @@ public partial class Game : Node3D
 		if (IsSectionClear()) NewSection();
 	}
 
-	private void EnterGame()
-	{
-		// Load all game assets and set variables.
-	}
-
 	private void ExitGame()
 	{
 		// Unload all game assets and null variables.
+	}
+
+	private bool IsOnLoadedSave()
+	{
+		if (DaySave == null) return false;
+		return true;
 	}
 
 	private bool IsSectionClear()
@@ -91,9 +107,9 @@ public partial class Game : Node3D
     private void PlayerZoomCamera(float from, float to, Tween.EaseType easeType,
 	bool useCameraSens, float duration = 0.3F)
 	{
-		if (Player.HasMethod("ZoomCamera"))
+		if (_Player.HasMethod("ZoomCamera"))
 		{
-			Player.Callv(Player.MethodName.ZoomCamera, new Godot.Collections.Array{
+			_Player.Callv(Player.MethodName.ZoomCamera, new Godot.Collections.Array{
 				from, to, (int)easeType, useCameraSens, duration
 			});	
 		}
@@ -103,9 +119,9 @@ public partial class Game : Node3D
 	Tween.EaseType easeType, bool useSens, bool lockCam,
 	float duration = 0.3F)
 	{
-		if (Player.HasMethod("ZoomAndLockCamera"))
+		if (_Player.HasMethod("ZoomAndLockCamera"))
 		{
-			Player.Callv(Player.MethodName.ZoomAndLockCamera, new Godot.Collections.Array{
+			_Player.Callv(Player.MethodName.ZoomAndLockCamera, new Godot.Collections.Array{
 				from, to, position, (int)easeType, useSens, lockCam, duration
 			});	
 		}
@@ -239,6 +255,25 @@ public partial class Game : Node3D
 
 			default: break;
 		}
+	}
+
+	private void UpdateSave()
+	{
+		DaySave.saveDay = CurrentDay;
+		DaySave.saveScore = CurrentScore;
+		DaySave.saveDifficulty = (Difficulty.DifficultyTypes)CurrentDifficulty;
+		DaySave.saveSeason = (Seasons.SeasonType)CurrentSeason;
+		DaySave.saveTableItemsCollumn = _Table.GetTableItems(false);
+		DaySave.saveTableItemsRow = _Table.GetTableItems(true);
+		DaySave.saveCustomEvents = Events.GetEvents();
+		DaySave.savePlayerHeldItem = (InteractableObject.InteractableObjectType)Player.playerCurrentHeldItem.ObjectType;
+	}
+
+	private void SaveGame()
+	{
+		UpdateSave();
+		Globals.SaveDay(DaySave.saveDay, DaySave.saveScore, DaySave.saveTableItemsCollumn,
+		DaySave.saveTableItemsRow, DaySave.saveCustomName, DaySave.saveCustomEvents);
 	}
 
 	private void AddInteractableObject(InteractableObject.InteractableObjectType type, Vector3 position = default, Vector3 rotation = default,

@@ -102,18 +102,20 @@ public partial class Globals : Node
         return null;
     }
 
-    public static void SaveDay(int day, int score, GodotCollections.Array<InteractableObject> tableItems, string customSaveName = "", string customEvents = "")
+    public static void SaveDay(int day, int score, GodotCollections.Array<InteractableObject.InteractableObjectType> tableItemsCollumn,
+    GodotCollections.Array<InteractableObject.InteractableObjectType> tableItemsRow, string customSaveName = "", GodotCollections.Array<Events.EventType> customEvents = default)
     {
         Day daySave = new Day();
 
-        daySave.customName = customSaveName;
-        daySave.customEvents = customEvents;
+        daySave.saveCustomName = customSaveName;
+        daySave.saveCustomEvents = customEvents;
 
-        daySave.day = day;
-        daySave.score = score;
-        daySave.tableItems = tableItems;
+        daySave.saveDay = day;
+        daySave.saveScore = score;
+        daySave.saveTableItemsRow = tableItemsRow;
+        daySave.saveTableItemsCollumn = tableItemsCollumn;
 
-        Day.Save(daySave, ("save_slots/" + "day-" + daySave.day), ("save_slots/" + "day-" + daySave.day + "/" + "day-" + daySave.day));
+        Day.Save(daySave, ("save_slots/" + "day-" + daySave.saveDay), ("save_slots/" + "day-" + daySave.saveDay + "/" + "day-" + daySave.saveDay));
         daySave = null;
     }
 

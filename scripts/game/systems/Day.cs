@@ -2,20 +2,21 @@ using Godot;
 
 public partial class Day : Resource
 {
-	[Export] public string customName;
+	[Export] public string saveCustomName;
 
-	[Export(PropertyHint.MultilineText)] public string customEvents;
+	[Export(PropertyHint.MultilineText)] public Godot.Collections.Array<Events.EventType> saveCustomEvents;
 
 	[Export] public byte[] saveGameVersion = new byte[] {Globals.gameVersionMajor, Globals.gameVersionMinor, Globals.gameVersionPatch};
 
-	[Export] public int day;
-	[Export] public int score;
-	[Export] public Seasons.SeasonType season;
-	[Export] public Difficulty.DifficultyTypes difficulty;
+	[Export] public int saveDay;
+	[Export] public int saveScore;
+	[Export] public Seasons.SeasonType saveSeason;
+	[Export] public Difficulty.DifficultyTypes saveDifficulty;
 	
-	[Export] public Godot.Collections.Array<InteractableObject> tableItems;
+	[Export] public Godot.Collections.Array<InteractableObject.InteractableObjectType> saveTableItemsRow;
+	[Export] public Godot.Collections.Array<InteractableObject.InteractableObjectType> saveTableItemsCollumn;
 
-	public InteractableObject playerHeldItem;
+	public InteractableObject.InteractableObjectType savePlayerHeldItem;
 
 	public static void Save(Day daySave, string path, string pathToFile)
 	{
