@@ -21,8 +21,10 @@ tonemap_mode = 2
 glow_enabled = true
 volumetric_fog_density = 0.0
 
-[node name="Game" type="Node3D"]
+[node name="Game" type="Node3D" node_paths=PackedStringArray("_Player", "_Table")]
 script = ExtResource("1_17okt")
+_Player = NodePath("Player/Player")
+_Table = NodePath("Interactables/Table")
 
 [node name="Interactables" type="Node" parent="."]
 

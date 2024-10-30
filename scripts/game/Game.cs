@@ -3,6 +3,9 @@ using Godot;
 
 public partial class Game : Node3D
 {
+	[Signal] public delegate void NewSeasonEventHandler();
+	[Signal] public delegate void EndSeasonEventHandler();
+
 	[Signal] public delegate void NewDayEventHandler();
 	[Signal] public delegate void EndDayEventHandler();
 
@@ -14,27 +17,39 @@ public partial class Game : Node3D
 	public static Seasons.SeasonType? CurrentSeason {get; set;}
 	public static int CurrentSection {get; set;}
 
+	public int daysNextSeason;
+
 	[Export] private Player _Player {get; set;}
 	[Export] private Table _Table {get; set;}
 
 	private byte _maxCherries = 6;
 	private byte _currentCherries;
 
+	private bool _hasCalledNewSection;
+
 	public override void _Ready()
 	{
-		if (!IsOnLoadedSave())
+		if (IsOnLoadedSave())
+		{
+			
+		}
+		else
 		{
 			DaySave = new Day();
 
 			if (CurrentDifficulty == null || !CurrentDifficulty.HasValue) CurrentDifficulty = Difficulty.DifficultyTypes.Normal;
 			if (CurrentSeason == null || !CurrentSeason.HasValue) CurrentSeason = Seasons.SeasonType.Spring;
 
+			daysNextSeason = 31;
+
 			SaveGame();
 		}
-		else
-		{
-			
-		}
+
+		NewDay += OnNewDay;
+		EndDay += OnEndDay;
+
+		NewSeason += OnNewSeason;
+		EndSeason += OnEndSeason;
 	}
 
 
@@ -62,12 +77,80 @@ public partial class Game : Node3D
 		return true;
 	}
 
-	private void NewSection()
+	private bool IsNewSeason()
 	{
+		if (CurrentDay >= daysNextSeason) return true;
+		return false;
+	}
+
+	private async void NewSection()
+	{
+		if (_hasCalledNewSection) return;
+
 		Print("NEW SECTION");
 		AddCherries(1);
 
 		CurrentSection++;
+		
+		_hasCalledNewSection = true;
+		await ToSignal(GetTree().CreateTimer(0.5F), "timeout");
+		_hasCalledNewSection = false;
+	}
+
+	private void OnNewDay()
+	{
+
+	}
+
+	private void OnEndDay()
+	{
+
+	}
+
+	private void OnNewSeason()
+	{
+		byte seasonNumber = (byte)CurrentSeason;
+		seasonNumber++;
+		CurrentSeason = (Seasons.SeasonType)seasonNumber;
+
+		Player.playerHealth = Player.playerMaxHealth;
+
+		switch (CurrentSeason)
+		{
+			// Season difficulty scale: 0 - 5
+			case Seasons.SeasonType.Winter: // 5
+
+				// Code
+
+			break;
+
+			case Seasons.SeasonType.Spring: // 1
+
+				// Code
+
+			break;
+
+			case Seasons.SeasonType.Summer: // 3
+
+				// Code
+
+			break;
+
+			case Seasons.SeasonType.Fall: // 2
+
+				// Code
+
+			break;
+
+			default: break;
+		}
+
+		daysNextSeason *= 2;
+	}
+
+	private void OnEndSeason()
+	{
+
 	}
 
 	private Godot.Collections.Array<Vector3> GetSpawnPoints()
@@ -262,16 +345,18 @@ public partial class Game : Node3D
 		DaySave.saveDay = CurrentDay;
 		DaySave.saveScore = CurrentScore;
 		DaySave.saveDifficulty = (Difficulty.DifficultyTypes)CurrentDifficulty;
+		DaySave.saveDayNextSeason = daysNextSeason;
 		DaySave.saveSeason = (Seasons.SeasonType)CurrentSeason;
-		DaySave.saveTableItemsCollumn = _Table.GetTableItems(false);
-		DaySave.saveTableItemsRow = _Table.GetTableItems(true);
+		DaySave.saveTableItemsCollumn = _Table.GetTableItemsCollumn();
+		DaySave.saveTableItemsRow = _Table.GetTableItemsRow();
 		DaySave.saveCustomEvents = Events.GetEvents();
-		DaySave.savePlayerHeldItem = (InteractableObject.InteractableObjectType)Player.playerCurrentHeldItem.ObjectType;
+		if (Player.IsPlayerHoldingItem()) DaySave.savePlayerHeldItem = (InteractableObject.InteractableObjectType)Player.playerCurrentHeldItem.ObjectType;
 	}
 
 	private void SaveGame()
 	{
 		UpdateSave();
+		// Rework save day system it sucks.
 		Globals.SaveDay(DaySave.saveDay, DaySave.saveScore, DaySave.saveTableItemsCollumn,
 		DaySave.saveTableItemsRow, DaySave.saveCustomName, DaySave.saveCustomEvents);
 	}

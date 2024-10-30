@@ -10,11 +10,12 @@ public partial class Day : Resource
 
 	[Export] public int saveDay;
 	[Export] public int saveScore;
+	[Export] public int saveDayNextSeason;
 	[Export] public Seasons.SeasonType saveSeason;
 	[Export] public Difficulty.DifficultyTypes saveDifficulty;
 	
-	[Export] public Godot.Collections.Array<InteractableObject.InteractableObjectType> saveTableItemsRow;
-	[Export] public Godot.Collections.Array<InteractableObject.InteractableObjectType> saveTableItemsCollumn;
+	[Export] public Godot.Collections.Array<InteractableObject.InteractableObjectType> saveTableItemsRow = new Godot.Collections.Array<InteractableObject.InteractableObjectType>{};
+	[Export] public Godot.Collections.Array<InteractableObject.InteractableObjectType> saveTableItemsCollumn = new Godot.Collections.Array<InteractableObject.InteractableObjectType>{};
 
 	public InteractableObject.InteractableObjectType savePlayerHeldItem;
 

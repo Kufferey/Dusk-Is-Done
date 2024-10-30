@@ -24,9 +24,14 @@ public partial class Table : Node3D
 	{
 	}
 
-	public Godot.Collections.Array<InteractableObject.InteractableObjectType> GetTableItems(bool row)
+	public Godot.Collections.Array<InteractableObject.InteractableObjectType> GetTableItemsRow()
 	{
-		return null;
+		return new Godot.Collections.Array<InteractableObject.InteractableObjectType>{{InteractableObject.InteractableObjectType.None}};
+	}
+
+	public Godot.Collections.Array<InteractableObject.InteractableObjectType> GetTableItemsCollumn()
+	{
+		return new Godot.Collections.Array<InteractableObject.InteractableObjectType>{{InteractableObject.InteractableObjectType.None}};
 	}
 
 	public void OnTableItemAdded(int atPos, InteractableObject interactableObject)
