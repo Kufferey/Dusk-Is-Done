@@ -55,6 +55,9 @@ public partial class Game : Node3D
 
 	public override void _Process(double delta)
 	{
+		if (Player.IsPlayerHoldingItem()) {
+			Print("True");
+		}
 		if (IsSectionClear()) NewSection();
 	}
 

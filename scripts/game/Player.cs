@@ -85,23 +85,11 @@ public partial class Player : Node3D
 		playerHealth = playerMinHealth;
 	}
 
-	public static bool IsPlayerDead()
-	{
-		if (playerHealth > playerMinHealth) return false;
-		return true;
-	}
+	public static bool IsPlayerDead() => playerHealth > playerMinHealth || true;
 
-	public static bool IsPlayerHoldingItemType(InteractableObject.InteractableObjectType type)
-	{
-		if (IsPlayerHoldingItem() && (InteractableObject.InteractableObjectType)playerCurrentHeldItem.ObjectType == type) return true;
-		return false;
-	}
+	public static bool IsPlayerHoldingItemType(InteractableObject.InteractableObjectType type) => IsPlayerHoldingItem() && (InteractableObject.InteractableObjectType)playerCurrentHeldItem.ObjectType == type || false;
 
-	public static bool IsPlayerHoldingItem()
-	{
-		if (playerCurrentHeldItem != null) return true;
-		return false;
-	}
+	public static bool IsPlayerHoldingItem() => playerCurrentHeldItem != null || false;
 
 	public InteractableObject GetHoveredItem()
 	{
@@ -164,5 +152,5 @@ public partial class Player : Node3D
 		}
 	}
 
-	public float GetCameraZoom() {return (float)PlayerCamera.Fov;}
+	public float GetCameraZoom() => (float)PlayerCamera.Fov;
 }
