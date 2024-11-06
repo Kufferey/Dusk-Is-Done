@@ -1,5 +1,6 @@
 using static Godot.GD;
 using Godot;
+using System.IO.Compression;
 
 public partial class Game : Node3D
 {
@@ -29,6 +30,12 @@ public partial class Game : Node3D
 
 	public override void _Ready()
 	{
+		NewDay += OnNewDay;
+		EndDay += OnEndDay;
+
+		NewSeason += OnNewSeason;
+		EndSeason += OnEndSeason;
+
 		if (IsOnLoadedSave())
 		{
 			
@@ -45,20 +52,12 @@ public partial class Game : Node3D
 			SaveGame();
 		}
 
-		NewDay += OnNewDay;
-		EndDay += OnEndDay;
-
-		NewSeason += OnNewSeason;
-		EndSeason += OnEndSeason;
 	}
 
 
 	public override void _Process(double delta)
 	{
-		if (Player.IsPlayerHoldingItem()) {
-			Print("True");
-		}
-		if (IsSectionClear()) NewSection();
+		// if (IsSectionClear()) NewSection();
 	}
 
 	private void ExitGame()
@@ -90,7 +89,6 @@ public partial class Game : Node3D
 	{
 		if (_hasCalledNewSection) return;
 
-		Print("NEW SECTION");
 		AddCherries(1);
 
 		CurrentSection++;
@@ -102,18 +100,20 @@ public partial class Game : Node3D
 
 	private void OnNewDay()
 	{
-
+		
 	}
 
 	private void OnEndDay()
 	{
+		SaveGame();
 
 	}
 
 	private void OnNewSeason()
 	{
 		byte seasonNumber = (byte)CurrentSeason;
-		seasonNumber++;
+		if (CurrentSeason == Seasons.SeasonType.Winter) seasonNumber = 0;
+		else seasonNumber++;
 		CurrentSeason = (Seasons.SeasonType)seasonNumber;
 
 		Player.playerHealth = Player.playerMaxHealth;
@@ -121,12 +121,6 @@ public partial class Game : Node3D
 		switch (CurrentSeason)
 		{
 			// Season difficulty scale: 0 - 5
-			case Seasons.SeasonType.Winter: // 5
-
-				// Code
-
-			break;
-
 			case Seasons.SeasonType.Spring: // 1
 
 				// Code
@@ -140,6 +134,12 @@ public partial class Game : Node3D
 			break;
 
 			case Seasons.SeasonType.Fall: // 2
+
+				// Code
+
+			break;
+
+			case Seasons.SeasonType.Winter: // 5
 
 				// Code
 

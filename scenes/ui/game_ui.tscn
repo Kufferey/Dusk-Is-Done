@@ -81,3 +81,14 @@ texture_under = ExtResource("3_wp3cq")
 texture_over = ExtResource("3_wp3cq")
 texture_progress = ExtResource("2_ii6qc")
 tint_progress = Color(0.341176, 1, 0.376471, 1)
+
+[node name="FPS" type="Control" parent="Main"]
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="Label" type="Label" parent="Main/FPS"]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 23.0
+text = "FPS"

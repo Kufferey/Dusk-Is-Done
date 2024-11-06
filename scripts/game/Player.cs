@@ -49,13 +49,16 @@ public partial class Player : Node3D
 			);
 
 			playerCurrentHeldItem.Rotation = PlayerHand.GlobalRotation;
+			
 			Vector3 newOffset = PlayerHand.GlobalPosition;
-
-			playerCurrentHeldItem.Position = new Vector3(
-				Mathf.Lerp(playerCurrentHeldItem.Position.X, newOffset.X, playerItemSway * (float)delta),
-				Mathf.Lerp(playerCurrentHeldItem.Position.Y, newOffset.Y, playerItemSway * (float)delta),
-				Mathf.Lerp(playerCurrentHeldItem.Position.Z, newOffset.Z, playerItemSway * (float)delta)
-			);
+			if (playerCurrentHeldItem.Position != newOffset)
+			{
+				playerCurrentHeldItem.Position = new Vector3(
+					Mathf.Lerp(playerCurrentHeldItem.Position.X, newOffset.X, playerItemSway * (float)delta),
+					Mathf.Lerp(playerCurrentHeldItem.Position.Y, newOffset.Y, playerItemSway * (float)delta),
+					Mathf.Lerp(playerCurrentHeldItem.Position.Z, newOffset.Z, playerItemSway * (float)delta)
+				);
+			}
 		}
 	}
 
@@ -72,8 +75,16 @@ public partial class Player : Node3D
 			);
 		}
 
-		if (@event is InputEventKey && @event.IsActionPressed("interact") && playerCanHoldItem && playerCurrentHoveredObject.IsInteractable && !IsPlayerHoldingItem())
+		if (@event is InputEventKey && @event.IsActionPressed("interact") && 
+		playerCurrentHoveredObject is InteractableObject && playerCanHoldItem && playerCurrentHoveredObject.IsInteractable && !IsPlayerHoldingItem())
 		{
+			if (playerCurrentHoveredObject.IsStatic)
+			{
+				playerCurrentHoveredObject.EmitSignal(InteractableObject.SignalName.ItemInteracted, (InteractableObject)playerCurrentHoveredObject);
+				
+				return;
+			}
+
 			SetHoveredToHeld();
 			playerCurrentHeldItem.EmitSignal(InteractableObject.SignalName.ItemInteracted, (InteractableObject)playerCurrentHeldItem);
 		}

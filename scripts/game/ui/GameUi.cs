@@ -40,6 +40,8 @@ public partial class GameUi : CanvasLayer
 			HealthBar.TintProgress = healthBarDefaultColor;
 			HealthBar.Value = Mathf.Lerp(HealthBar.Value, Player.playerHealth, 0.1F);
 		}
+
+		GetNode<Label>("Main/FPS/Label").Text = "FPS: " + Engine.GetFramesPerSecond().ToString();
 	}
 
 	public void ChangeUi(InteractionIconsEnum interactionIcon, string text)

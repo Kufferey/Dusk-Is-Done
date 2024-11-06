@@ -1,0 +1,20 @@
+[gd_scene load_steps=2 format=3 uid="uid://nmjg5b86w7us"]
+
+[ext_resource type="PackedScene" uid="uid://cqlqgar7v4pl8" path="res://scenes/ui/menu/lock.tscn" id="1_uu6vi"]
+
+[node name="MainMenu" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Lock" parent="." instance=ExtResource("1_uu6vi")]
+layout_mode = 1
+offset_left = 192.0
+offset_top = 64.0
+offset_right = -896.0
+offset_bottom = -520.0
+LockText = "Use All Items To Unlock.
+ITEMS LEFT: Pills, Medical Pills, and Notebook."
