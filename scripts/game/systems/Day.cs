@@ -9,7 +9,7 @@ public partial class Day : Resource
 	[Export] public byte[] saveGameVersion = new byte[] {Globals.gameVersionMajor, Globals.gameVersionMinor, Globals.gameVersionPatch};
 
 	[Export] public int saveDay;
-	[Export] public int saveScore;
+	[Export] public uint saveScore;
 	[Export] public int saveDayNextSeason;
 	[Export] public Seasons.SeasonType saveSeason;
 	[Export] public Difficulty.DifficultyTypes saveDifficulty;

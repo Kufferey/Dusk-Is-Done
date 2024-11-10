@@ -1,6 +1,5 @@
 using static Godot.GD;
 using Godot;
-using System.IO.Compression;
 
 public partial class Game : Node3D
 {
@@ -13,12 +12,12 @@ public partial class Game : Node3D
 	public static Day DaySave {get; set;}
 
 	public static Difficulty.DifficultyTypes? CurrentDifficulty {get; set;}
-	public static int CurrentDay {get; set;}
-	public static int CurrentScore {get; set;}
+	public static ushort CurrentDay {get; set;}
+	public static uint CurrentScore {get; set;}
 	public static Seasons.SeasonType? CurrentSeason {get; set;}
-	public static int CurrentSection {get; set;}
+	public static byte CurrentSection {get; set;}
 
-	public int daysNextSeason;
+	public byte daysNextSeason;
 
 	[Export] private Player _Player {get; set;}
 	[Export] private Table _Table {get; set;}
@@ -38,7 +37,8 @@ public partial class Game : Node3D
 
 		if (IsOnLoadedSave())
 		{
-			
+			AddInteractableObject(DaySave.savePlayerHeldItem, Vector3.Zero, Vector3.Zero, "PlayerSaveItem");
+			Player.playerCurrentHeldItem = GetNode<InteractableObject>("Interactables/PlayerSaveItem");
 		}
 		else
 		{
@@ -51,7 +51,6 @@ public partial class Game : Node3D
 
 			SaveGame();
 		}
-
 	}
 
 
@@ -298,6 +297,11 @@ public partial class Game : Node3D
 			break;
 
 			case InteractableObject.InteractableObjectType.CherrySpoiled:
+
+				//Code
+
+			break;
+
 			case InteractableObject.InteractableObjectType.Cherry:
 
 				//Code
@@ -333,7 +337,6 @@ public partial class Game : Node3D
 
 			case InteractableObject.InteractableObjectType.MedicalKit:
 
-				// Max health
 				Player.playerHealth = Player.playerMaxHealth;
 
 			break;
@@ -360,14 +363,15 @@ public partial class Game : Node3D
 	{
 		UpdateSave();
 		// Rework save day system it sucks.
-		Globals.SaveDay(DaySave.saveDay, DaySave.saveScore, DaySave.saveTableItemsCollumn,
-		DaySave.saveTableItemsRow, DaySave.saveCustomName, DaySave.saveCustomEvents);
+		Globals.SaveDay(DaySave);
 	}
 
 	private void AddInteractableObject(InteractableObject.InteractableObjectType type, Vector3 position = default, Vector3 rotation = default,
-	string nodePath = "Interactables")
+	string name = "", string nodePath = "Interactables")
 	{
 		InteractableObject interactableObject = InteractableObjectManager.interactableObjectPrefabs[type].Instantiate<InteractableObject>(PackedScene.GenEditState.Disabled);
+
+		if (name != "" || name != null) interactableObject.Name = name;
 
 		// Item signals
 		interactableObject.ItemHovered += OnItemHovered;

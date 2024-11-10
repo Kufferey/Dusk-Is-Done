@@ -68,8 +68,6 @@ public partial class InteractableObject : Node3D
 	{
 		if (condition)
 		{
-			if (playerInteractedSoundOnce && hasPlayedInteractedSound) return;
-
 			if ((bool)(playerInteractedSoundOnce && !hasPlayedInteractedSound) || !playerInteractedSoundOnce)
 			{
 				AudioStreamPlayer audioStreamPlayer = new AudioStreamPlayer();
