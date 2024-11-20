@@ -49,6 +49,8 @@ public partial class Game : Node3D
 
 			daysNextSeason = 31;
 
+			Print("new save");
+
 			SaveGame();
 		}
 	}
@@ -64,25 +66,15 @@ public partial class Game : Node3D
 		// Unload all game assets and null variables.
 	}
 
-	private bool IsOnLoadedSave()
-	{
-		if (DaySave == null) return false;
-		return true;
-	}
+	private bool IsOnLoadedSave() => DaySave == null ? false : true;
 
 	private bool IsSectionClear()
 	{
 		int cherryAmount = GetNode<Node>("Interactables/Cherry/Cherries").GetChildCount();
-		
-		if (cherryAmount > 0) return false;
-		return true;
+		return cherryAmount <= 0 || false;
 	}
 
-	private bool IsNewSeason()
-	{
-		if (CurrentDay >= daysNextSeason) return true;
-		return false;
-	}
+	private bool IsNewSeason() => CurrentDay >= daysNextSeason || false;
 
 	private async void NewSection()
 	{

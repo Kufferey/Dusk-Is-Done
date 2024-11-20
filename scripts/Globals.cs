@@ -5,9 +5,9 @@ using GodotCollections = Godot.Collections;
 public partial class Globals : Node
 {
     // Game
-    public static byte gameVersionMajor = 1;
-    public static byte gameVersionMinor = 0;
-    public static byte gameVersionPatch = 0;
+    public static byte gameVersionMajor = 0;
+    public static byte gameVersionMinor = 1;
+    public static byte gameVersionPatch = 5;
 
     public static string gameVersion = gameVersionMajor.ToString() + "." + gameVersionMinor.ToString() + "." + gameVersionPatch.ToString();
 

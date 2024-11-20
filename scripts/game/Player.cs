@@ -104,13 +104,13 @@ public partial class Player : Node3D
 
 	public InteractableObject GetHoveredItem()
 	{
-		if (!playerCanHoldItem || !playerCanInteract || playerCurrentHeldItem != null || !PlayerRaycast.IsColliding()) {PlayerUi?.ChangeUi(GameUi.InteractionIconsEnum.None, ""); return null;}
+		if (!playerCanHoldItem || !playerCanInteract || playerCurrentHeldItem != null || !PlayerRaycast.IsColliding()) {PlayerUi?.ChangeUi(GameUi.InteractionIcons.None, ""); return null;}
 		
 		GodotObject hoveredObject = PlayerRaycast.GetCollider();
 		if (hoveredObject is Node3D item) if (item?.GetParent() is InteractableObject interactableItem)
 		{
 			interactableItem.EmitSignal(InteractableObject.SignalName.ItemHovered, (int)interactableItem.ObjectType);
-			PlayerUi?.ChangeUi(GameUi.InteractionIconsEnum.Normal, "Press [E] to Pickup: " + interactableItem.ObjectName?.ToString());
+			PlayerUi?.ChangeUi(GameUi.InteractionIcons.Normal, "Press [E] to Pickup: " + interactableItem.ObjectName?.ToString());
 
 			return interactableItem;
 		}

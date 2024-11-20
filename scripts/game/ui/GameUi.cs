@@ -2,19 +2,19 @@ using Godot;
 
 public partial class GameUi : CanvasLayer
 {
-	public Godot.Collections.Array<CompressedTexture2D> interactionIcons = new Godot.Collections.Array<CompressedTexture2D>
+	public Godot.Collections.Array<CompressedTexture2D> interactionIconTextures = new Godot.Collections.Array<CompressedTexture2D>
 	{
 		{null},
 		{ResourceLoader.Load<CompressedTexture2D>("res://assets/images/icons/interaction/interactionicon-pregrab.png")}
 	};
 
-	public enum InteractionIconsEnum
+	public enum InteractionIcons
 	{
 		None,
 		Normal,
 	}
 
-	public static InteractionIconsEnum interactionIcon = InteractionIconsEnum.None;
+	public static InteractionIcons interactionIcon = InteractionIcons.None;
 
 	[Export] public Control InteractionUiContainer {get; set;}
 
@@ -44,9 +44,9 @@ public partial class GameUi : CanvasLayer
 		GetNode<Label>("Main/FPS/Label").Text = "FPS: " + Engine.GetFramesPerSecond().ToString();
 	}
 
-	public void ChangeUi(InteractionIconsEnum interactionIcon, string text)
+	public void ChangeUi(InteractionIcons interactionIcon, string text)
 	{
-		IconBox.Texture = interactionIcons[(int)interactionIcon];
+		IconBox.Texture = interactionIconTextures[(int)interactionIcon];
 		TextBox.Text = text;
 	}
 }
