@@ -23,8 +23,17 @@ public partial class InteractableObject : Node3D
 	[Export] public bool IsInteractable {get; set;} = true;
 	[Export] public bool IsStatic {get; set;} = false;
 	[Export] public bool IsHolding {get; set;} = false;
+
+	[Export] public InteractableObjectTableItemType ItemTableType {get; set;}
+
 	[Export] public Godot.Vector3 interactionBoxScale = new Godot.Vector3(1.5F, 1.5F, 1.5F);
 	[Export] public Godot.Vector3 holdingScale = new Vector3(1.5F, 1.5F, 1.5F);
+
+	public enum InteractableObjectTableItemType
+	{
+		NormalItem,
+		BigItem,
+	}
 
 	public enum InteractableObjectType
 	{
