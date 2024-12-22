@@ -19,8 +19,8 @@ public partial class Game : Node3D
 
 	public byte daysNextSeason;
 
-	[Export] private Player _Player {get; set;}
-	[Export] private Table _Table {get; set;}
+	[Export] private Player Player {get; set;}
+	[Export] private Table Table {get; set;}
 
 	private byte _maxCherries = 6;
 	private byte _currentCherries;
@@ -37,8 +37,7 @@ public partial class Game : Node3D
 
 		if (IsOnLoadedSave())
 		{
-			AddInteractableObject(DaySave.savePlayerHeldItem, Vector3.Zero, Vector3.Zero, "PlayerSaveItem");
-			Player.playerCurrentHeldItem = GetNode<InteractableObject>("Interactables/PlayerSaveItem");
+			
 		}
 		else
 		{
@@ -184,9 +183,9 @@ public partial class Game : Node3D
     private void PlayerZoomCamera(float from, float to, Tween.EaseType easeType,
 	bool useCameraSens, float duration = 0.3F)
 	{
-		if (_Player.HasMethod("ZoomCamera"))
+		if (Player.HasMethod("ZoomCamera"))
 		{
-			_Player.Callv(Player.MethodName.ZoomCamera, new Godot.Collections.Array{
+			Player.Callv(Player.MethodName.ZoomCamera, new Godot.Collections.Array{
 				from, to, (int)easeType, useCameraSens, duration
 			});	
 		}
@@ -196,9 +195,9 @@ public partial class Game : Node3D
 	Tween.EaseType easeType, bool useSens, bool lockCam,
 	float duration = 0.3F)
 	{
-		if (_Player.HasMethod("ZoomAndLockCamera"))
+		if (Player.HasMethod("ZoomAndLockCamera"))
 		{
-			_Player.Callv(Player.MethodName.ZoomAndLockCamera, new Godot.Collections.Array{
+			Player.Callv(Player.MethodName.ZoomAndLockCamera, new Godot.Collections.Array{
 				from, to, position, (int)easeType, useSens, lockCam, duration
 			});	
 		}
@@ -345,8 +344,8 @@ public partial class Game : Node3D
 		DaySave.saveDifficulty = (Difficulty.DifficultyTypes)CurrentDifficulty;
 		DaySave.saveDayNextSeason = daysNextSeason;
 		DaySave.saveSeason = (Seasons.SeasonType)CurrentSeason;
-		DaySave.saveTableItemsCollumn = _Table.GetTableItemsCollumn();
-		DaySave.saveTableItemsRow = _Table.GetTableItemsRow();
+		DaySave.saveTableItemsCollumn = Table.GetTableItemsCollumn();
+		DaySave.saveTableItemsRow = Table.GetTableItemsRow();
 		DaySave.saveCustomEvents = Events.GetEvents();
 		if (Player.IsPlayerHoldingItem()) DaySave.savePlayerHeldItem = (InteractableObject.InteractableObjectType)Player.playerCurrentHeldItem.ObjectType;
 	}

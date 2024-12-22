@@ -50,15 +50,12 @@ public partial class Player : Node3D
 
 			playerCurrentHeldItem.Rotation = PlayerHand.GlobalRotation;
 			
-			Vector3 newOffset = PlayerHand.GlobalPosition;
-			if (playerCurrentHeldItem.Position != newOffset)
-			{
-				playerCurrentHeldItem.Position = new Vector3(
-					Mathf.Lerp(playerCurrentHeldItem.Position.X, newOffset.X, playerItemSway * (float)delta),
-					Mathf.Lerp(playerCurrentHeldItem.Position.Y, newOffset.Y, playerItemSway * (float)delta),
-					Mathf.Lerp(playerCurrentHeldItem.Position.Z, newOffset.Z, playerItemSway * (float)delta)
-				);
-			}
+			Vector3 newOffset = PlayerHand.GlobalPosition - (playerCurrentHeldItem.GlobalPosition + PlayerHand.GlobalPosition.Normalized());
+			if (playerCurrentHeldItem.Position != newOffset) playerCurrentHeldItem.Position = new Vector3(
+				Mathf.Lerp(playerCurrentHeldItem.Position.X, newOffset.X, playerItemSway * (float)delta),
+				Mathf.Lerp(playerCurrentHeldItem.Position.Y, newOffset.Y, playerItemSway * (float)delta),
+				Mathf.Lerp(playerCurrentHeldItem.Position.Z, newOffset.Z, playerItemSway * (float)delta)
+			);	
 		}
 	}
 

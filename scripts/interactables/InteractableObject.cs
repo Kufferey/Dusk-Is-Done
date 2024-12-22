@@ -27,7 +27,7 @@ public partial class InteractableObject : Node3D
 	[Export] public InteractableObjectTableItemType ItemTableType {get; set;}
 
 	[Export] public Godot.Vector3 interactionBoxScale = new Godot.Vector3(1.5F, 1.5F, 1.5F);
-	[Export] public Godot.Vector3 holdingScale = new Vector3(1.5F, 1.5F, 1.5F);
+	[Export] public Godot.Vector3 holdingScale = new Vector3(0.1F, 0.1F, 0.1F);
 
 	public enum InteractableObjectTableItemType
 	{
@@ -42,14 +42,20 @@ public partial class InteractableObject : Node3D
 		Random,
 		RandomTableItem,
 
+		/* GAMEPLAY */
+
 		Cherry,
 		CherrySpoiled,
+
+		/* HEALS */
 
 		Pills,
 		Bandage,
 		MedicalPills,
 		MedicalKit,
 		
+		/* SECRET */
+
 		Notebook,
 	}
 
