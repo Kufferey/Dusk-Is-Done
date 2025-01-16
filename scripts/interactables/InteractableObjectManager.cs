@@ -7,15 +7,17 @@ public partial class InteractableObjectManager : Node
 	
     public static Godot.Collections.Dictionary<InteractableObject.InteractableObjectType, PackedScene> interactableObjectPrefabs {get; set;} = new Godot.Collections.Dictionary<InteractableObject.InteractableObjectType, PackedScene>
 	{
-		{InteractableObject.InteractableObjectType.Cherry,        (Godot.PackedScene)ResourceLoader.Load<PackedScene>("")},
-		{InteractableObject.InteractableObjectType.CherrySpoiled, (Godot.PackedScene)ResourceLoader.Load<PackedScene>("")},
+		{InteractableObject.InteractableObjectType.Test,          (Godot.PackedScene)ResourceLoader.Load<PackedScene>("res://scenes/interactables/table_items/test.tscn")},
+
+		{InteractableObject.InteractableObjectType.Cherry,        (Godot.PackedScene)ResourceLoader.Load<PackedScene>("res://scenes/interactables/cherry/cherry.tscn")},
+		{InteractableObject.InteractableObjectType.CherrySpoiled, (Godot.PackedScene)ResourceLoader.Load<PackedScene>("res://scenes/interactables/cherry/cherry_spoiled.tscn")},
 		
-		{InteractableObject.InteractableObjectType.Pills,         (Godot.PackedScene)ResourceLoader.Load<PackedScene>("")},
-		{InteractableObject.InteractableObjectType.Bandage,       (Godot.PackedScene)ResourceLoader.Load<PackedScene>("")},
-		{InteractableObject.InteractableObjectType.MedicalPills,  (Godot.PackedScene)ResourceLoader.Load<PackedScene>("")},
-		{InteractableObject.InteractableObjectType.MedicalKit,    (Godot.PackedScene)ResourceLoader.Load<PackedScene>("")},
+		{InteractableObject.InteractableObjectType.Pills,         (Godot.PackedScene)ResourceLoader.Load<PackedScene>("res://scenes/interactables/table_items/test.tscn")},
+		{InteractableObject.InteractableObjectType.Bandage,       (Godot.PackedScene)ResourceLoader.Load<PackedScene>("res://scenes/interactables/table_items/test.tscn")},
+		{InteractableObject.InteractableObjectType.MedicalPills,  (Godot.PackedScene)ResourceLoader.Load<PackedScene>("res://scenes/interactables/table_items/test.tscn")},
+		{InteractableObject.InteractableObjectType.MedicalKit,    (Godot.PackedScene)ResourceLoader.Load<PackedScene>("res://scenes/interactables/table_items/test.tscn")},
 		
-		{InteractableObject.InteractableObjectType.Notebook,      (Godot.PackedScene)ResourceLoader.Load<PackedScene>("")},
+		{InteractableObject.InteractableObjectType.Notebook,      (Godot.PackedScene)ResourceLoader.Load<PackedScene>("res://scenes/interactables/table_items/test.tscn")},
 	};
 
 	// Add a interaction item to "interactableObjectPrefabs".

@@ -2,27 +2,22 @@ using Godot;
 
 public partial class Day : Resource
 {
-	[Export]
-	public string customName;
+	[Export] public string saveCustomName;
 
-	[Export(PropertyHint.MultilineText)]
-	public string customEvents;
+	[Export(PropertyHint.MultilineText)] public Godot.Collections.Array<Events.EventType> saveCustomEvents;
 
-	[Export]
-	public string saveGameVersion = Globals.gameVersion;
+	[Export] public byte[] saveGameVersion = new byte[] {Globals.gameVersionMajor, Globals.gameVersionMinor, Globals.gameVersionPatch};
 
-	[Export]
-	public int day;
-	[Export]
-	public int score;
-	[Export]
-	public Seasons.SeasonType season;
-	[Export]
-	public Difficulty.DifficultyTypes difficulty;
+	[Export] public int saveDay;
+	[Export] public uint saveScore;
+	[Export] public int saveDayNextSeason;
+	[Export] public Seasons.SeasonType saveSeason;
+	[Export] public Difficulty.DifficultyTypes saveDifficulty;
 	
-	public InteractableObject playerHeldItem;
-	[Export]
-	public Godot.Collections.Array<InteractableObject> tableItems;
+	[Export] public Godot.Collections.Array<InteractableObject.InteractableObjectType> saveTableItemsRow = new Godot.Collections.Array<InteractableObject.InteractableObjectType>{};
+	[Export] public Godot.Collections.Array<InteractableObject.InteractableObjectType> saveTableItemsCollumn = new Godot.Collections.Array<InteractableObject.InteractableObjectType>{};
+
+	public InteractableObject.InteractableObjectType savePlayerHeldItem;
 
 	public static void Save(Day daySave, string path, string pathToFile)
 	{

@@ -3,6 +3,9 @@
 [ext_resource type="PackedScene" uid="uid://ibp5swfilbpv" path="res://scenes/interactables/interactable_object.tscn" id="1_wi34f"]
 
 [node name="CherrySpoiled" instance=ExtResource("1_wi34f")]
-objectName = "Spoiled Cherry"
-objectDesc = "A non-good Cherry."
-objectType = 4
+ObjectName = "Spoiled Cherry"
+ObjectDesc = "A Bad Resource."
+ObjectType = 5
+
+[node name="CollisionShape3D" parent="Area3D" index="0"]
+transform = Transform3D(1.5, 0, 0, 0, 1.5, 0, 0, 0, 1.5, 0, 0, 0)

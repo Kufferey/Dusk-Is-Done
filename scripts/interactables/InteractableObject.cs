@@ -1,60 +1,69 @@
+using System;
 using Godot;
 
 [Tool]
 [GlobalClass]
 public partial class InteractableObject : Node3D
 {
-	[Signal]
-	public delegate void ItemHoveredEventHandler(InteractableObject.InteractableObjectType type);
-	[Signal]
-	public delegate void ItemInteractedEventHandler(InteractableObject.InteractableObjectType type);
-	[Signal]
-	public delegate void ItemUsedEventHandler(InteractableObject.InteractableObjectType type);
+	[Signal] public delegate void ItemHoveredEventHandler(InteractableObject.InteractableObjectType type);
+	[Signal] public delegate void ItemInteractedEventHandler(InteractableObject.InteractableObjectType type);
+	[Signal] public delegate void ItemUsedEventHandler(InteractableObject.InteractableObjectType type);
 
-	[Export]
-	public string objectName;
-	[Export(PropertyHint.MultilineText)]
-	public string objectDesc;
-	[Export(PropertyHint.Enum)]
-	public InteractableObjectType objectType;
-	[Export]
-	public AudioStream objectInteractedSound;
-	[Export]
-	public AudioStream objectUsedSound;
+	[Export] public string ObjectName {get; set;}
+	[Export(PropertyHint.MultilineText)] public string ObjectDesc {get; set;}
+	[Export(PropertyHint.Enum)] public InteractableObjectType ObjectType {get; set;}
+
+	[ExportGroup("Item Audio")]
+	[Export] public AudioStream objectInteractedSound;
+	[Export] public bool playerInteractedSoundOnce;
+	[Export] public bool hasPlayedInteractedSound;
+	[Export] public AudioStream objectUsedSound;
 
 	[ExportGroup("Item Settings")]
-	[Export]
-	public bool isInteractable {get; set;} = true;
-	[Export]
-	public bool isHolding {get; set;} = false;
-	[Export]
-	public Godot.Vector3 interactionBoxScale {get; set;} = new Godot.Vector3(3, 3, 3);
-	[Export]
-	public Godot.Vector3 holdingScale {get; set;} = new Vector3(2, 2, 2);
+	[Export] public bool IsInteractable {get; set;} = true;
+	[Export] public bool IsStatic {get; set;} = false;
+	[Export] public bool IsHolding {get; set;} = false;
+
+	[Export] public InteractableObjectTableItemType ItemTableType {get; set;}
+
+	[Export] public Godot.Vector3 interactionBoxScale = new Godot.Vector3(1.5F, 1.5F, 1.5F);
+	[Export] public Godot.Vector3 holdingScale = new Vector3(0.1F, 0.1F, 0.1F);
+
+	public enum InteractableObjectTableItemType
+	{
+		NormalItem,
+		BigItem,
+	}
 
 	public enum InteractableObjectType
 	{
 		None,
+		Test,
 		Random,
 		RandomTableItem,
 
+		/* GAMEPLAY */
+
 		Cherry,
 		CherrySpoiled,
+
+		/* HEALS */
 
 		Pills,
 		Bandage,
 		MedicalPills,
 		MedicalKit,
 		
+		/* SECRET */
+
 		Notebook,
 	}
 
-	private CollisionShape3D interactionBox;
-
+	private CollisionShape3D _interactionBox;
 
     public override void _Ready()
     {
-		if (interactionBox == null) interactionBox = GetNode<CollisionShape3D>("Area3D/CollisionShape3D");
+		if (_interactionBox == null) _interactionBox = GetNode<CollisionShape3D>("Area3D/CollisionShape3D");
 
 		ItemHovered += OnItemHovered;
 		ItemInteracted += OnItemInteracted;
@@ -65,22 +74,25 @@ public partial class InteractableObject : Node3D
 	{
 		if (Engine.IsEditorHint())
 		{
-			if (interactionBox == null) interactionBox = GetNode<CollisionShape3D>("Area3D/CollisionShape3D");
-			interactionBox.Scale = interactionBoxScale;
+			if (_interactionBox == null) _interactionBox = GetNode<CollisionShape3D>("Area3D/CollisionShape3D");
+			_interactionBox.Scale = interactionBoxScale;
 		}
 	}
 
-	public void PlaySound(bool condition, AudioStream sound)
+	private void PlaySound(bool condition, AudioStream sound)
 	{
 		if (condition)
 		{
-			AudioStreamPlayer audioStreamPlayer = new AudioStreamPlayer();
-			audioStreamPlayer.Stream = sound;
-			AddChild(audioStreamPlayer);
-			audioStreamPlayer.Play();
-			audioStreamPlayer.Finished += () => {
-				audioStreamPlayer.QueueFree();
-			};
+			if ((bool)(playerInteractedSoundOnce && !hasPlayedInteractedSound) || !playerInteractedSoundOnce)
+			{
+				AudioStreamPlayer audioStreamPlayer = new AudioStreamPlayer();
+				audioStreamPlayer.Stream = sound;
+				AddChild(audioStreamPlayer);
+				audioStreamPlayer.Play();
+				audioStreamPlayer.Finished += () => {
+					audioStreamPlayer.QueueFree();
+				};
+			}
 		}
 	}
 
@@ -91,7 +103,7 @@ public partial class InteractableObject : Node3D
 
 	public void OnItemInteracted(InteractableObject.InteractableObjectType type)
 	{
-		isHolding = true;
+		IsHolding = true;
 
 		// Scalling
 		Scale = new Vector3(
@@ -99,49 +111,13 @@ public partial class InteractableObject : Node3D
 			holdingScale.Y,
 			holdingScale.Z
 		);
-		
-		// Audio
-		PlaySound(objectInteractedSound != null, objectInteractedSound);
+
+        // Audio
+        PlaySound(objectInteractedSound != null, objectInteractedSound);
 	}
 
 	public void OnItemUsed(InteractableObject.InteractableObjectType type)
 	{
 		PlaySound(objectUsedSound != null, objectUsedSound);
-		
-		switch (type)
-		{
-			case InteractableObjectType.Pills:
-
-			// Code for Pills
-
-			break;
-
-			case InteractableObjectType.Bandage:
-
-			// Code for Bandage
-
-			break;
-
-			case InteractableObjectType.MedicalPills:
-
-			// Code for MedicalPills
-
-			break;
-
-			case InteractableObjectType.MedicalKit:
-
-			// Code for MedicalKit
-
-			break;
-
-			case InteractableObjectType.Notebook:
-			
-			// Code for Notebook
-
-			break;
-
-			default:
-			break;
-		}
 	}
 }

@@ -1,17 +1,17 @@
 using System;
-using System.Linq;
-using System.Runtime.InteropServices;
 using Godot;
 using GodotCollections = Godot.Collections;
 
 public partial class Globals : Node
 {
     // Game
-    public static string gameVersion = "0.0.0";
+    public static byte gameVersionMajor = 0;
+    public static byte gameVersionMinor = 1;
+    public static byte gameVersionPatch = 5;
+
+    public static string gameVersion = gameVersionMajor.ToString() + "." + gameVersionMinor.ToString() + "." + gameVersionPatch.ToString();
 
     public static string gameDaySavePath = "user://save_slots";
-
-    // Other
 
     public static GodotCollections.Dictionary<string, Variant> saveData = new GodotCollections.Dictionary<string, Variant>
     {
@@ -102,18 +102,9 @@ public partial class Globals : Node
         return null;
     }
 
-    public static void SaveDay(int day, int score, GodotCollections.Array<InteractableObject> tableItems, string customSaveName = "", string customEvents = "")
+    public static void SaveDay(Day daySave)
     {
-        Day daySave = new Day();
-
-        daySave.customName = customSaveName;
-        daySave.customEvents = customEvents;
-
-        daySave.day = day;
-        daySave.score = score;
-        daySave.tableItems = tableItems;
-
-        Day.Save(daySave, ("save_slots/" + "day-" + daySave.day), ("save_slots/" + "day-" + daySave.day + "/" + "day-" + daySave.day));
+        Day.Save(daySave, ("save_slots/" + "day-" + daySave.saveDay), ("save_slots/" + "day-" + daySave.saveDay + "/" + "day-" + daySave.saveDay));
         daySave = null;
     }
 

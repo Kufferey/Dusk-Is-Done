@@ -1,0 +1,105 @@
+[gd_scene load_steps=7 format=3 uid="uid://nmjg5b86w7us"]
+
+[ext_resource type="Script" path="res://scripts/menus/MainMenu.cs" id="1_j5trb"]
+[ext_resource type="Texture2D" uid="uid://vtynkmdperbu" path="res://assets/images/branding/logo.png" id="2_48ogw"]
+[ext_resource type="AudioStream" uid="uid://b4bkhfhy3s2l4" path="res://assets/music/menus/mainmenu.ogg" id="4_n0we3"]
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_6itot"]
+sky_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
+ground_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
+
+[sub_resource type="Sky" id="Sky_84nu4"]
+sky_material = SubResource("ProceduralSkyMaterial_6itot")
+
+[sub_resource type="Environment" id="Environment_ymrr2"]
+background_mode = 2
+sky = SubResource("Sky_84nu4")
+tonemap_mode = 2
+glow_enabled = true
+
+[node name="MainMenu" type="Control" node_paths=PackedStringArray("version", "button1", "button2")]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_j5trb")
+version = NodePath("Label2")
+button1 = NodePath("Play")
+button2 = NodePath("Quit")
+
+[node name="SubViewportContainer" type="SubViewportContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+stretch = true
+
+[node name="SubViewport" type="SubViewport" parent="SubViewportContainer"]
+handle_input_locally = false
+size = Vector2i(1152, 648)
+render_target_update_mode = 4
+
+[node name="Node3D" type="Node3D" parent="SubViewportContainer/SubViewport"]
+
+[node name="Camera3D" type="Camera3D" parent="SubViewportContainer/SubViewport/Node3D"]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="SubViewportContainer/SubViewport/Node3D"]
+environment = SubResource("Environment_ymrr2")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="SubViewportContainer/SubViewport/Node3D"]
+transform = Transform3D(-0.866023, -0.433016, 0.250001, 0, 0.499998, 0.866027, -0.500003, 0.749999, -0.43301, 0, 0, 0)
+shadow_enabled = true
+
+[node name="TextureRect" type="TextureRect" parent="."]
+layout_mode = 0
+offset_right = 317.0
+offset_bottom = 183.0
+texture = ExtResource("2_48ogw")
+
+[node name="Label2" type="Label" parent="."]
+layout_mode = 0
+offset_left = 1000.0
+offset_top = 584.0
+offset_right = 1693.0
+offset_bottom = 711.0
+theme_override_constants/line_spacing = -11
+theme_override_font_sizes/font_size = 50
+text = "V0.0.0"
+
+[node name="Play" type="Button" parent="."]
+layout_mode = 0
+offset_top = 256.0
+offset_right = 256.0
+offset_bottom = 320.0
+text = "PLAY"
+
+[node name="ItemCustomizer" type="Button" parent="."]
+layout_mode = 0
+offset_top = 352.0
+offset_right = 256.0
+offset_bottom = 416.0
+text = "ITEM CUSTOMIZER"
+
+[node name="Settings" type="Button" parent="."]
+layout_mode = 0
+offset_top = 448.0
+offset_right = 256.0
+offset_bottom = 512.0
+text = "SETTINGS"
+
+[node name="Quit" type="Button" parent="."]
+layout_mode = 0
+offset_top = 544.0
+offset_right = 256.0
+offset_bottom = 608.0
+text = "QUIT"
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("4_n0we3")
+volume_db = 4.0
+autoplay = true
+mix_target = 1
