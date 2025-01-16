@@ -1,0 +1,150 @@
+[gd_scene load_steps=17 format=3 uid="uid://dn44rusqd22fj"]
+
+[ext_resource type="Script" path="res://scripts/game/Game.cs" id="1_17okt"]
+[ext_resource type="Script" path="res://scripts/game/Player.cs" id="2_jxq7i"]
+[ext_resource type="PackedScene" uid="uid://7doxy6mx53u8" path="res://scenes/interactables/table/Table.tscn" id="3_duk5y"]
+[ext_resource type="PackedScene" uid="uid://cplhobau0s0sa" path="res://scenes/game/cherry_spawn_point.tscn" id="4_w84ut"]
+[ext_resource type="Script" path="res://scripts/game/WorldMusic.cs" id="5_jxaj0"]
+[ext_resource type="Texture2D" uid="uid://cn5rs652qh7ra" path="res://assets/images/monsters/donfar.png" id="5_t0w5b"]
+[ext_resource type="PackedScene" uid="uid://cmfrs1sfxlvnn" path="res://scenes/ui/game_ui.tscn" id="6_mdlwj"]
+[ext_resource type="AudioStream" uid="uid://c7vqut0t3dd76" path="res://assets/music/ambience_songs/fighting_chance.ogg" id="6_nbeyd"]
+[ext_resource type="Material" uid="uid://cb1mtoukvrbka" path="res://assets/images/textures/orthagomic/orthagomic.tres" id="7_23fv6"]
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_88tpi"]
+sky_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
+ground_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
+
+[sub_resource type="Sky" id="Sky_u554q"]
+sky_material = SubResource("ProceduralSkyMaterial_88tpi")
+
+[sub_resource type="Environment" id="Environment_88ols"]
+background_mode = 2
+sky = SubResource("Sky_u554q")
+tonemap_mode = 2
+glow_enabled = true
+volumetric_fog_density = 0.0
+volumetric_fog_gi_inject = 0.0
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_bwkxk"]
+atlas = ExtResource("5_t0w5b")
+region = Rect2(0, 0, 142, 272)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_utuhr"]
+atlas = ExtResource("5_t0w5b")
+region = Rect2(142, 0, 142, 272)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_kujd4"]
+atlas = ExtResource("5_t0w5b")
+region = Rect2(284, 0, 142, 272)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_ou5hm"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_bwkxk")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_utuhr")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_kujd4")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
+
+[node name="Game" type="Node3D" node_paths=PackedStringArray("Player", "Table")]
+script = ExtResource("1_17okt")
+Player = NodePath("Player/Player")
+Table = NodePath("Interactables/Table")
+
+[node name="Interactables" type="Node" parent="."]
+
+[node name="Table" parent="Interactables" instance=ExtResource("3_duk5y")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.15839, 0, -1.55396)
+
+[node name="Cherry" type="Node" parent="Interactables"]
+
+[node name="SpawnPoints" type="Node" parent="Interactables/Cherry"]
+
+[node name="CherrySpawnPoint" parent="Interactables/Cherry/SpawnPoints" instance=ExtResource("4_w84ut")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 2)
+
+[node name="Cherries" type="Node" parent="Interactables/Cherry"]
+
+[node name="Environment" type="Node" parent="."]
+
+[node name="WorldMusic" type="Node" parent="Environment" node_paths=PackedStringArray("audioStreamPlayer", "timer")]
+script = ExtResource("5_jxaj0")
+audioStreamPlayer = NodePath("AudioStreamPlayer")
+timer = NodePath("Timer")
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="Environment/WorldMusic"]
+stream = ExtResource("6_nbeyd")
+volume_db = -5.0
+
+[node name="Timer" type="Timer" parent="Environment/WorldMusic"]
+wait_time = 100.0
+autostart = true
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="Environment"]
+environment = SubResource("Environment_88ols")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="Environment"]
+transform = Transform3D(-0.866023, -0.433016, 0.250001, 0, 0.499998, 0.866027, -0.500003, 0.749999, -0.43301, 0, 0, 0)
+shadow_enabled = true
+
+[node name="Monster" type="Node" parent="Environment"]
+
+[node name="DonFar" type="AnimatedSprite3D" parent="Environment/Monster"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.695456, 7.41994)
+texture_filter = 0
+sprite_frames = SubResource("SpriteFrames_ou5hm")
+autoplay = "default"
+frame = 2
+frame_progress = 1.0
+speed_scale = 0.5
+
+[node name="CSGBox3D" type="CSGBox3D" parent="Environment"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.19027, -0.237037, -2.15901)
+material_override = ExtResource("7_23fv6")
+
+[node name="CSGSphere3D" type="CSGSphere3D" parent="Environment/CSGBox3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.4067, 0, 0)
+radial_segments = 100
+rings = 100
+
+[node name="Props" type="Node" parent="."]
+
+[node name="CSGBox3D" type="CSGBox3D" parent="Props"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.740241, 0)
+size = Vector3(6.86816, 0.0952148, 5.90137)
+
+[node name="Trees" type="Node" parent="Props"]
+
+[node name="Player" type="Node" parent="."]
+
+[node name="Player" type="Node3D" parent="Player" node_paths=PackedStringArray("PlayerCameraNode", "PlayerCamera", "PlayerRaycast", "PlayerHand", "PlayerUi")]
+script = ExtResource("2_jxq7i")
+playerItemSway = 10.0
+PlayerCameraNode = NodePath("CameraNeck")
+PlayerCamera = NodePath("CameraNeck/Camera3D")
+PlayerRaycast = NodePath("CameraNeck/RayCast3D")
+PlayerHand = NodePath("CameraNeck/Hand")
+PlayerUi = NodePath("GameUi")
+
+[node name="GameUi" parent="Player/Player" instance=ExtResource("6_mdlwj")]
+
+[node name="CameraNeck" type="Node3D" parent="Player/Player"]
+
+[node name="Camera3D" type="Camera3D" parent="Player/Player/CameraNeck"]
+
+[node name="Hand" type="Node3D" parent="Player/Player/CameraNeck"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.695684, -0.370874, -1.26238)
+
+[node name="RayCast3D" type="RayCast3D" parent="Player/Player/CameraNeck"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1)
+target_position = Vector3(0, 0, -4)
+collide_with_areas = true
+debug_shape_custom_color = Color(0, 1, 0, 0.137255)

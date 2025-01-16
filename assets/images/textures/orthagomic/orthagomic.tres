@@ -1,0 +1,16 @@
+[gd_resource type="ShaderMaterial" load_steps=5 format=3 uid="uid://cb1mtoukvrbka"]
+
+[ext_resource type="Shader" path="res://scripts/shaders/orthagomic.gdshader" id="1_gxjdy"]
+[ext_resource type="Texture2D" uid="uid://cdaiaea3dwgyx" path="res://assets/images/textures/orthagomic/orthagomic_tex_1.png" id="2_mehfs"]
+[ext_resource type="Texture2D" uid="uid://cegpw8kh8m6ti" path="res://assets/images/textures/orthagomic/orthagomic_tex_2.png" id="3_dq16w"]
+[ext_resource type="Texture2D" uid="uid://ne5qfofvryvb" path="res://assets/images/textures/orthagomic/orthagomic_tex_3.png" id="4_3l3sf"]
+
+[resource]
+render_priority = 0
+shader = ExtResource("1_gxjdy")
+shader_parameter/speed1 = Vector2(-0.2, 0.2)
+shader_parameter/speed2 = Vector2(0.15, -0.2)
+shader_parameter/speed3 = Vector2(0, 0)
+shader_parameter/texture1 = ExtResource("2_mehfs")
+shader_parameter/texture2 = ExtResource("3_dq16w")
+shader_parameter/texture3 = ExtResource("4_3l3sf")

@@ -1,0 +1,246 @@
+[gd_scene load_steps=6 format=3 uid="uid://bc5m1gwfcbqtr"]
+
+[ext_resource type="Script" path="res://scripts/menus/settings/SettingsMenu.cs" id="1_0oocl"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_bs4vq"]
+bg_color = Color(0, 0, 0, 0.12549)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_t88kr"]
+bg_color = Color(0.0962047, 0.0962048, 0.0962047, 1)
+border_width_left = 15
+border_width_top = 15
+border_width_right = 15
+border_width_bottom = 15
+border_color = Color(0.450648, 0.450648, 0.450648, 1)
+border_blend = true
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_yxy0v"]
+bg_color = Color(0.136826, 0.136826, 0.136826, 1)
+border_width_left = 30
+border_width_top = 30
+border_width_bottom = 30
+border_color = Color(0.176471, 0.176471, 0.176471, 0.45098)
+border_blend = true
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_6hk8c"]
+bg_color = Color(0.0728426, 0.0728426, 0.0728426, 0.513726)
+border_width_top = 30
+border_width_right = 30
+border_width_bottom = 30
+border_color = Color(0.180392, 0.180392, 0.180392, 0.45098)
+border_blend = true
+
+[node name="SettingsMenu" type="Control" node_paths=PackedStringArray("graphicsButton", "displayButton", "gameplayButton", "audioButton", "backButton")]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_0oocl")
+graphicsButton = NodePath("Contain/Buttons/ButtonContain/Graphics")
+displayButton = NodePath("Contain/Buttons/ButtonContain/Display")
+gameplayButton = NodePath("Contain/Buttons/ButtonContain/Gameplay")
+audioButton = NodePath("Contain/Buttons/ButtonContain/Audio")
+backButton = NodePath("Contain/Buttons/ButtonContain/Back")
+
+[node name="Panel" type="Panel" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_bs4vq")
+
+[node name="Contain" type="Control" parent="."]
+anchors_preset = 0
+offset_left = 64.0
+offset_top = 64.0
+offset_right = 1088.0
+offset_bottom = 576.0
+
+[node name="Panel" type="Panel" parent="Contain"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_t88kr")
+
+[node name="Buttons" type="Control" parent="Contain"]
+anchors_preset = 0
+offset_left = 64.0
+offset_top = 64.0
+offset_right = 256.0
+offset_bottom = 448.0
+
+[node name="Panel" type="Panel" parent="Contain/Buttons"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_yxy0v")
+
+[node name="ButtonContain" type="VBoxContainer" parent="Contain/Buttons"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 5
+alignment = 1
+
+[node name="Graphics" type="Button" parent="Contain/Buttons/ButtonContain"]
+layout_mode = 2
+mouse_default_cursor_shape = 2
+text = "Graphics"
+alignment = 0
+
+[node name="Display" type="Button" parent="Contain/Buttons/ButtonContain"]
+layout_mode = 2
+mouse_default_cursor_shape = 2
+text = "Display"
+alignment = 0
+
+[node name="Gameplay" type="Button" parent="Contain/Buttons/ButtonContain"]
+layout_mode = 2
+mouse_default_cursor_shape = 2
+text = "Gameplay"
+alignment = 0
+
+[node name="Audio" type="Button" parent="Contain/Buttons/ButtonContain"]
+layout_mode = 2
+mouse_default_cursor_shape = 2
+text = "Audio"
+alignment = 0
+
+[node name="Save" type="Button" parent="Contain/Buttons/ButtonContain"]
+layout_mode = 2
+mouse_default_cursor_shape = 2
+theme_override_colors/font_color = Color(0.329412, 0.729412, 0.333333, 1)
+text = "Save"
+alignment = 0
+
+[node name="Back" type="Button" parent="Contain/Buttons/ButtonContain"]
+layout_mode = 2
+mouse_default_cursor_shape = 2
+theme_override_colors/font_color = Color(1, 0.821723, 0.791818, 1)
+text = "Back"
+alignment = 0
+
+[node name="SubSettings" type="Control" parent="Contain"]
+anchors_preset = 0
+offset_left = 256.0
+offset_top = 64.0
+offset_right = 960.0
+offset_bottom = 448.0
+
+[node name="Panel" type="Panel" parent="Contain/SubSettings"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_6hk8c")
+
+[node name="Graphics" type="Control" parent="Contain/SubSettings"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="LoadedAssetOpt" type="CheckButton" parent="Contain/SubSettings/Graphics"]
+layout_mode = 0
+offset_left = 63.0
+offset_top = 64.0
+offset_right = 318.0
+offset_bottom = 95.0
+mouse_default_cursor_shape = 2
+button_pressed = true
+text = "PRELOADED ITEMS"
+
+[node name="Graphics" type="MenuButton" parent="Contain/SubSettings/Graphics"]
+layout_mode = 0
+offset_left = 64.0
+offset_top = 96.0
+offset_right = 320.0
+offset_bottom = 128.0
+mouse_default_cursor_shape = 2
+text = "GRAPHICS"
+alignment = 0
+switch_on_hover = true
+item_count = 3
+popup/item_0/text = "LOW"
+popup/item_0/checkable = 2
+popup/item_1/text = "MEDIUM"
+popup/item_1/checkable = 2
+popup/item_1/id = 1
+popup/item_2/text = "HIGH"
+popup/item_2/checkable = 2
+popup/item_2/id = 2
+
+[node name="Display" type="Control" parent="Contain/SubSettings"]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="FullScreen" type="CheckButton" parent="Contain/SubSettings/Display"]
+layout_mode = 0
+offset_left = 64.0
+offset_top = 64.0
+offset_right = 256.0
+offset_bottom = 95.0
+mouse_default_cursor_shape = 2
+text = "FULLSCREEN"
+
+[node name="Gameplay" type="Control" parent="Contain/SubSettings"]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 1.0
+offset_right = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="CameraMovementOpt" type="CheckButton" parent="Contain/SubSettings/Gameplay"]
+layout_mode = 0
+offset_left = 64.0
+offset_top = 64.0
+offset_right = 319.0
+offset_bottom = 95.0
+mouse_default_cursor_shape = 2
+button_pressed = true
+text = "CAMERA MOVEMENT"
+
+[node name="HandMovementOpt" type="CheckButton" parent="Contain/SubSettings/Gameplay"]
+layout_mode = 0
+offset_left = 63.0
+offset_top = 96.0
+offset_right = 318.0
+offset_bottom = 127.0
+mouse_default_cursor_shape = 2
+button_pressed = true
+text = "HAND MOVEMENT"
+
+[node name="Audio" type="Control" parent="Contain/SubSettings"]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2

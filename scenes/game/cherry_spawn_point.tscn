@@ -1,0 +1,15 @@
+[gd_scene load_steps=3 format=3 uid="uid://cplhobau0s0sa"]
+
+[ext_resource type="Script" path="res://scripts/game/cherry/CherrySpawnPoint.cs" id="1_557na"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_3irjt"]
+size = Vector3(0.685547, 0.51001, 0.756104)
+
+[node name="CherrySpawnPoint" type="Node3D" node_paths=PackedStringArray("Area3D")]
+script = ExtResource("1_557na")
+Area3D = NodePath("Area3D")
+
+[node name="Area3D" type="Area3D" parent="."]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Area3D"]
+shape = SubResource("BoxShape3D_3irjt")
